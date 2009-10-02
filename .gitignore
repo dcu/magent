@@ -1,0 +1,6 @@
+*~
+config/gitspace.yml
+lib/couchmapper
+lib/discm
+log/*
+public/stylesheets/**/*.css
