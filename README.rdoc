@@ -1,26 +1,25 @@
 = magent
 
-* http://github.com/#{github_username}/#{project_name}
+* http://github.com/dcu/magent
 
 == DESCRIPTION:
 
-FIX (describe your package)
+Simple job queue system based on mongodb
 
 == FEATURES/PROBLEMS:
 
-* FIX (list of features or problems)
-
 == SYNOPSIS:
 
-  FIX (code sample of usage)
+see examples/
 
 == REQUIREMENTS:
 
-* FIX (list of requirements)
+* mongodb-ruby-driver
 
 == INSTALL:
 
-* FIX (sudo gem install, anything else)
+* rake gem
+* sudo gem install pkg/*.gem
 
 == LICENSE:
 
@@ -46,3 +45,4 @@ IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
 CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
 TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+

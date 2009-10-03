@@ -3,7 +3,6 @@ Manifest.txt
 PostInstall.txt
 README.rdoc
 Rakefile
-bin/magent
 examples/simple/bot.rb
 lib/magent.rb
 lib/magent/actor.rb
