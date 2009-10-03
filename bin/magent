@@ -2,21 +2,138 @@
 
 $:.unshift File.dirname(__FILE__)+"/../lib/"
 require 'magent'
+require 'optparse'
+require 'fileutils'
 
-actor_file = ARGV.first
-app_name = File.basename($0)
-
-if actor_file.nil?
-  $stderr.puts "Usage: #{app_name} <my_agent.rb>"
+def usage(option_parser, error = nil)
+  $stderr.puts error if error
+  $stderr.puts option_parser
   exit 1
 end
 
-load actor_file
+options = {}
+
+optparser = OptionParser.new do |opts|
+  opts.banner = "Usage: #{$0} [options] <start|stop|restart>\n\nExample: magent -t carl1 -a /path/to/agent.rb -d -P /tmp restart\n\nOptions:"
+
+  opts.on("-a PATH", "--agent=PATH", "Path to agent") do |o|
+    options[:agent] = o
+  end
+
+  opts.on("-t ID", "--identifier=ID", "Identifier") do |o|
+    options[:identifier] = o
+  end
+
+  opts.on("-d", "--daemonize", "Run agent as a daemon") do |o|
+    options[:daemonize] = true
+  end
+
+  opts.on("-l", "--log-path=PATH", "Log path") do |o|
+    options[:log_path] = o
+  end
+
+  opts.on("-P", "--piddir=PATH", "PID dir to use (if daemonized)", "Default: #{options[:piddir]}") do |o|
+    options[:piddir] = o
+  end
+
+  opts.on_tail("-h", "--help", "Show this help message.") do
+    puts opts
+    exit
+  end
+end
+
+args = []
+begin
+  args = optparser.parse!
+rescue => e
+  $stderr.puts e
+  $stderr.puts optparser
+  exit 0
+end
+
+if !options[:agent]
+  usage(optparser, "Error: --agent is required")
+end
+
+load options[:agent]
 
 if Magent.current_actor.nil?
-  $stderr.puts "Use Magent.register(YourActor.new) to register an actor"
-  $stderr.puts "Usage: #{app_name} <my_agent.rb>"
-  exit 1
+  usage(optparser, "Use Magent.register(YourActor.new) to register an actor")
 end
 
-Magent::Processor.new(Magent.current_actor).run!
+class Controller
+  def initialize(actor, opts)
+    @options = opts
+    @actor = actor
+
+    @options[:log_path] ||= Dir.getwd
+
+    @identity = @options[:identifier] || Magent::Utils.underscore(actor.class.to_s)
+    @identity << "-#{Socket.gethostname.split('.')[0]}"
+  end
+
+  def start
+    if @options[:daemonize] && @options[:piddir]
+      run_as_daemon
+    else
+      Magent::Processor.new(@actor).run!
+    end
+  end
+
+  def stop
+    begin
+      pid = File.read(pid_file).to_i
+      Process.kill("TERM", pid)
+      Process.kill(0, pid)
+      Process.wait
+    rescue Errno::ECHILD, Errno::ESRCH => e
+      $stdout.puts "Process #{pid} has stopped"
+    rescue Errno::ENOENT => e
+      $stdout.puts "Warning: #{e}"
+    ensure
+      File.unlink(pid_file) if File.exist?(pid_file)
+    end
+  end
+
+  def restart
+    begin
+      stop
+    rescue => e
+      $stderr.puts "Warning: #{e}"
+    end
+    start
+  end
+
+  private
+  def run_as_daemon
+    daemonize
+
+    FileUtils.mkpath(@options[:piddir])
+    if @options[:piddir]
+      File.open(pid_file, "w") do |f|
+        f.write(Process.pid)
+      end
+    end
+
+    Magent::Processor.new(@actor).run!
+  end
+
+  def pid_file
+    @pid_file ||= File.join(@options[:piddir], "magent.#{@identity}.pid")
+  end
+
+  def daemonize
+    exit if fork
+    Process.setsid
+    exit if fork
+
+    STDIN.reopen "/dev/null"
+    STDOUT.reopen "#{@options[:log_path]}/magent.#{@identity}.out", "a"
+    STDERR.reopen "#{@options[:log_path]}/magent.#{@identity}.err", "a"
+
+    STDERR.sync = true
+    STDOUT.sync = true
+  end
+end
+
+Controller.new(Magent.current_actor, options).send(args.shift)
