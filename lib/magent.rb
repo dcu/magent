@@ -3,6 +3,7 @@ $:.unshift(File.dirname(__FILE__)) unless
 
 require 'mongo'
 require 'magent/channel'
+require 'magent/push'
 
 module Magent
   VERSION = '0.0.1'
@@ -23,3 +24,5 @@ module Magent
     @@database
   end
 end
+
+Magent.database = 'magent'
