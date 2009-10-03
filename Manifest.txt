@@ -3,9 +3,13 @@ Manifest.txt
 PostInstall.txt
 README.rdoc
 Rakefile
+bin/magent
+examples/simple/bot.rb
 lib/magent.rb
+lib/magent/actor.rb
+lib/magent/channel.rb
+lib/magent/processor.rb
+lib/magent/push.rb
+lib/magent/utils.rb
+magent.gemspec
 script/console
-script/destroy
-script/generate
-test/test_helper.rb
-test/test_magent.rb
