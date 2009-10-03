@@ -17,7 +17,7 @@ module Magent
         function dequeue() {
           return db.eval(function() {
             var q = db.channels.findOne({_id: '#{@name}'});
-            var m = q.messages.pop();
+            var m = q.messages.shift();
             db.channels.save(q); //slow
             return m;
           });
