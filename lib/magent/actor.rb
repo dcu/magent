@@ -7,12 +7,14 @@ module Magent
     end
 
     module ClassMethods
-      def expose(*actions)
-        @actions ||= Set.new
-
-        actions.each do |m|
-          @actions << m.to_s
+      def expose(*methods)
+        methods.each do |m|
+          actions << m.to_s
         end
+      end
+
+      def actions
+        @actions ||= Set.new
       end
 
       def can_handle?(action)

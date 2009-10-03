@@ -4,6 +4,12 @@ module Magent
 
     def initialize(actor)
       @actor = actor
+
+      @actor.class.actions.each do |action|
+        if !@actor.respond_to?(action)
+          raise ArgumentError, "action '#{action}' is not defined"
+        end
+      end
     end
 
     def run!
@@ -12,7 +18,7 @@ module Magent
         method, payload = @actor.class.channel.dequeue
 
         if method.nil?
-          delay += 0.1 if delay <= 10
+          delay += 0.1 if delay <= 5
         else
           delay = 0
           $stderr.puts "#{@actor.class}##{method}(#{payload.inspect})"
