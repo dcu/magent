@@ -1,0 +1,22 @@
+#!/usr/bin/env ruby
+
+$:.unshift File.dirname(__FILE__)+"/../lib/"
+require 'magent'
+
+actor_file = ARGV.first
+app_name = File.basename($0)
+
+if actor_file.nil?
+  $stderr.puts "Usage: #{app_name} <my_agent.rb>"
+  exit 1
+end
+
+load actor_file
+
+if Magent.current_actor.nil?
+  $stderr.puts "Use Magent.register(YourActor.new) to register an actor"
+  $stderr.puts "Usage: #{app_name} <my_agent.rb>"
+  exit 1
+end
+
+Magent::Processor.new(Magent.current_actor).run!

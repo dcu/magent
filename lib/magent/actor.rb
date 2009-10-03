@@ -29,5 +29,13 @@ module Magent
         end
       end
     end
+  end # Actor
+
+  def self.register(actor)
+    @current_actor = actor
+  end
+
+  def self.current_actor
+    @current_actor
   end
 end
