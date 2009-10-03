@@ -19,6 +19,13 @@ module Magent
         return false if @actions.nil?
         @actions.include?(action.to_s)
       end
+
+      def channel
+        @channel ||= begin
+          channel_name = "/"+Magent::Utils.underscore(self.name)
+          Channel.new(channel_name)
+        end
+      end
     end
   end
 end
