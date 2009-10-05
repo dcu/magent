@@ -27,6 +27,7 @@ module Magent
           rescue Exception => e
             $stderr.puts "Error while executing #{method.inspect} #{payload.inspect}"
             $stderr.puts "#{e.to_s} #{e.backtrace.join("\t\n")}"
+            @actor.class.channel.failed(:message => e.message, :method => method, :payload => payload, :backtrace => e.backtrace)
           end
         end
 
