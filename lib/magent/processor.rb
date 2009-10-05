@@ -22,7 +22,12 @@ module Magent
         else
           delay = 0
           $stderr.puts "#{@actor.class}##{method}(#{payload.inspect})"
-          @actor.send(method, payload) # TODO: what if method is not defined?
+          begin
+            @actor.send(method, payload) # TODO: what if method is not defined?
+          rescue Exception => e
+            $stderr.puts "Error while executing #{method.inspect} #{payload.inspect}"
+            $stderr.puts "#{e.to_s} #{e.backtrace.join("\t\n")}"
+          end
         end
 
         sleep delay
