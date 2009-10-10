@@ -23,7 +23,11 @@ module Magent
           delay = 0
           $stderr.puts "#{@actor.class}##{method}(#{payload.inspect})"
           begin
-            @actor.send(method, payload) # TODO: what if method is not defined?
+            if @actor.class.actions.include?(method)
+              @actor.send(method, payload)
+            else
+              $stderr.puts "Unknown action: #{method} (payload=#{payload.inspect})"
+            end
           rescue Exception => e
             $stderr.puts "Error while executing #{method.inspect} #{payload.inspect}"
             $stderr.puts "#{e.to_s} #{e.backtrace.join("\t\n")}"
