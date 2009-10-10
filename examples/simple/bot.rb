@@ -3,13 +3,13 @@ require 'magent'
 
 # Use: magent /path/to/this/file
 
-Magent.push("/bot", :echo, "hello, world")
-Magent.push("/bot", :do_task, "File", :exist?, "/etc/passwd")
-Magent.push("/bot", :echo, "Press ctrl+c to close")
+Magent.push("/bots", :echo, "hello, world")
+Magent.push("/bots", :do_task, "File", :exist?, "/etc/passwd")
+Magent.push("/bots", :echo, "Press ctrl+c to close")
 
 class Bot
   include Magent::Actor
-
+  channel_name "bots"
   expose :echo, :do_task
 
   def echo(payload)
@@ -30,3 +30,4 @@ Magent.register(Bot.new)
 if $0 == __FILE__
   Magent::Processor.new(Magent.current_actor).run!
 end
+

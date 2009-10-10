@@ -13,6 +13,10 @@ module Magent
         end
       end
 
+      def channel_name(name = nil)
+        @channel_name ||= (name || Magent::Utils.underscore(self.name))
+      end
+
       def actions
         @actions ||= Set.new
       end
@@ -24,7 +28,7 @@ module Magent
 
       def channel
         @channel ||= begin
-          channel_name = "/"+Magent::Utils.underscore(self.name)
+          channel_name = "/"+self.channel_name
           Channel.new(channel_name)
         end
       end
