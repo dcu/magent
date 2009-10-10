@@ -26,12 +26,12 @@ module Magent
     def dequeue
       Magent.database.eval(%@
         function dequeue() {
-          return db.eval(function() {
-            var q = db.channels.findOne({_id: '#{@name}'});
-            var m = q.messages.shift();
-            db.channels.save(q); //slow
-            return m;
-          });
+          var selector = {_id: '#{@name}'};
+          var q = db.channels.findOne(selector, {messages: 1 });
+          var m = q.messages[0];
+          if(m)
+            db.channels.update(selector, { $pop: { messages : -1 } })
+          return m;
         }
       @)
     end
