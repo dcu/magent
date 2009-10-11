@@ -13,7 +13,7 @@ module Magent
   VERSION = '0.0.2'
 
   def self.connection
-    @@connection ||= Mongo::Connection.new
+    @@connection ||= Mongo::Connection.new(nil, nil, :auto_reconnect => true)
   end
 
   def self.connection=(new_connection)
