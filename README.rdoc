@@ -8,13 +8,18 @@ Simple job queue system based on mongodb
 
 == FEATURES/PROBLEMS:
 
+* fast (enough?)
+* simple
+* scalable
+
 == SYNOPSIS:
 
 see examples/
 
 == REQUIREMENTS:
 
-* mongodb-ruby-driver
+* mongodb >= 1.0
+* mongo   >= 0.15.1 (gem install mongo -s http://gemcutter.org )
 
 == INSTALL:
 
