@@ -4,6 +4,7 @@ $:.unshift(File.dirname(__FILE__)) unless
 require 'mongo'
 require 'set'
 require 'magent/utils'
+require 'magent/generic_channel'
 require 'magent/channel'
 require 'magent/push'
 require 'magent/actor'

@@ -8,6 +8,7 @@ examples/simple/bot.rb
 lib/magent.rb
 lib/magent/actor.rb
 lib/magent/channel.rb
+lib/magent/generic_channel.rb
 lib/magent/processor.rb
 lib/magent/push.rb
 lib/magent/utils.rb
