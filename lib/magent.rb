@@ -11,7 +11,7 @@ require 'magent/actor'
 require 'magent/processor'
 
 module Magent
-  VERSION = '0.1.1'
+  VERSION = '0.1.2'
 
   def self.connection
     @@connection ||= Mongo::Connection.new(nil, nil, :auto_reconnect => true)
