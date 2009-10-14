@@ -13,6 +13,7 @@ module Magent
     end
 
     def run!
+      processed_messages = 0
       delay = 0
       loop do
         method, payload = @actor.class.channel.dequeue
@@ -24,7 +25,13 @@ module Magent
           $stderr.puts "#{@actor.class}##{method}(#{payload.inspect})"
           begin
             if @actor.class.actions.include?(method)
+              processed_messages += 1
               @actor.send(method, payload)
+
+              if processed_messages > 20
+                processed_messages = 0
+                GC.start
+              end
             else
               $stderr.puts "Unknown action: #{method} (payload=#{payload.inspect})"
             end
