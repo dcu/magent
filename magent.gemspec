@@ -12,7 +12,7 @@ Gem::Specification.new do |s|
   s.email = ["krawek@gmail.com"]
   s.executables = ["magent"]
   s.extra_rdoc_files = ["History.txt", "Manifest.txt", "PostInstall.txt"]
-  s.files = ["History.txt", "Manifest.txt", "PostInstall.txt", "README.rdoc", "Rakefile", "bin/magent", "examples/simple/bot.rb", "lib/magent.rb", "lib/magent/actor.rb", "lib/magent/channel.rb", "lib/magent/processor.rb", "lib/magent/push.rb", "lib/magent/utils.rb", "magent.gemspec", "script/console", "test/test_helper.rb", "test/test_magent.rb"]
+  s.files = ["History.txt", "Manifest.txt", "PostInstall.txt", "README.rdoc", "Rakefile", "bin/magent", "examples/comm/run.rb", "examples/comm/worker.rb", "examples/simple/bot.rb", "lib/magent.rb", "lib/magent/actor.rb", "lib/magent/channel.rb", "lib/magent/generic_channel.rb", "lib/magent/processor.rb", "lib/magent/push.rb", "lib/magent/utils.rb", "magent.gemspec", "script/console", "test/test_helper.rb", "test/test_magent.rb"]
   s.homepage = %q{http://github.com/dcu/magent}
   s.post_install_message = %q{PostInstall.txt}
   s.rdoc_options = ["--main", "README.rdoc"]
