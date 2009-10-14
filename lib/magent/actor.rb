@@ -3,6 +3,7 @@ module Magent
     def self.included(klass)
       klass.class_eval do
         extend Actor::ClassMethods
+        include Actor::InstanceMethods
       end
     end
 
@@ -31,6 +32,35 @@ module Magent
           channel_name = "/"+self.channel_name
           Channel.new(channel_name)
         end
+      end
+
+      def tasks
+        @tasks ||= []
+      end
+
+      def at_least_every(seconds, &block)
+        tasks << {:every => seconds, :last_time => Time.now, :block => block}
+      end
+    end
+
+    module InstanceMethods
+      def _run_tasks
+        tasks = self.class.tasks
+
+        return false if tasks.empty?
+        performed = false
+
+        tasks.each do |task|
+          delta = Time.now - task[:last_time]
+
+          if delta >= task[:every]
+            task[:last_time] = Time.now
+            instance_eval(&task[:block])
+            performed = true
+          end
+        end
+
+        performed
       end
     end
   end # Actor

@@ -16,6 +16,8 @@ module Magent
       processed_messages = 0
       delay = 0
       loop do
+        delay = 0 if @actor._run_tasks
+
         method, payload = @actor.class.channel.dequeue
 
         if method.nil?

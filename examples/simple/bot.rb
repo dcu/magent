@@ -24,6 +24,9 @@ class Bot
     $stderr.puts "RESULT: #{result}"
   end
 
+  at_least_every 15 do
+    puts "Hi there!, you'll see this message again in ~15 seconds"
+  end
 end
 
 Magent.register(Bot.new)
