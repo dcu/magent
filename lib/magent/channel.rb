@@ -12,11 +12,15 @@ module Magent
       page = conds.delete(:page) || 1
       per_page = conds.delete(:per_page) || 10
 
-      error_collection.find({:channel_id => @name}, {:offset => (page-1)*per_page, :limit => per_page, :sort => ["created_at"]})
+      error_collection.find({:channel_id => @name}, {:skip => (page-1)*per_page, :limit => per_page, :sort => [["created_at", "descending"]]})
     end
 
     def remove_error(error_id)
-      object_id = Mongo::ObjectID.from_string(error_id)
+      object_id = error_id
+      if error_id.kind_of?(String)
+        object_id = Mongo::ObjectID.from_string(error_id)
+      end
+
       self.error_collection.remove(:_id => object_id, :channel_id => @name)
     end
 
