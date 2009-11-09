@@ -9,7 +9,26 @@ module Magent
     end
 
     def enqueue(message)
-      collection.update({:_id => @name}, {:$push => {:messages => message}}, :repsert => true)
+      collection.update({:_id => @name}, {:$push => {:messages => message}, :$inc => {:message_count => 1}}, :repsert => true)
+    end
+
+    def message_count
+      channel = collection.find({:_id => @name}, :fields => [:message_count]).next_object
+      if channel
+        channel["message_count"] || 0
+      else
+        0
+      end
+    end
+
+    def queue_count
+      Magent.database.eval(%@
+        function queue_count() {
+          var selector = {_id: '#{@name}'};
+          var q = db.channels.findOne(selector, {messages: 1 });
+          return q.messages.length;
+        }
+      @)
     end
 
     def dequeue

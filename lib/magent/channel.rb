@@ -8,6 +8,10 @@ module Magent
       error_collection.save(info.merge({:channel_id => @name, :created_at => Time.now.utc}))
     end
 
+    def error_count
+      error_collection.find({:channel_id => @name}).count()
+    end
+
     def errors(conds = {})
       page = conds.delete(:page) || 1
       per_page = conds.delete(:per_page) || 10
