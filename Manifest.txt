@@ -6,7 +6,9 @@ Rakefile
 bin/magent
 examples/comm/run.rb
 examples/comm/worker.rb
+examples/error/error.rb
 examples/simple/bot.rb
+examples/stats/stats.rb
 lib/magent.rb
 lib/magent/actor.rb
 lib/magent/channel.rb
