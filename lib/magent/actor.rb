@@ -55,7 +55,12 @@ module Magent
 
           if delta >= task[:every]
             task[:last_time] = Time.now
-            instance_eval(&task[:block])
+            begin
+              instance_eval(&task[:block])
+            rescue Exception => e
+              $stderr.puts "Failed periodical task: #{e.message}"
+              $stderr.puts e.backtrace.join("\n\t")
+            end
             performed = true
           end
         end
