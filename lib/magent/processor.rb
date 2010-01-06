@@ -33,7 +33,7 @@ module Magent
           delay = 0
           $stderr.puts "#{@actor.class}##{@method}(#{@payload.inspect})"
           begin
-            if @actor.class.actions.include?(@method)
+            if @actor.class.can_handle?(@method)
               processed_messages += 1
               @actor.send(@method, @payload)
 

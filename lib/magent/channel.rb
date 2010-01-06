@@ -5,27 +5,24 @@ module Magent
     end
 
     def failed(info)
-      error_collection.save(info.merge({:channel_id => @name, :created_at => Time.now.utc}))
+      error_collection.save(info.merge({:_id => generate_uid, :channel => @name, :created_at => Time.now.utc}))
     end
 
     def error_count
-      error_collection.find({:channel_id => @name}).count()
+      error_collection.count()
     end
 
     def errors(conds = {})
       page = conds.delete(:page) || 1
       per_page = conds.delete(:per_page) || 10
 
-      error_collection.find({:channel_id => @name}, {:skip => (page-1)*per_page, :limit => per_page, :sort => [["created_at", "descending"]]})
+      error_collection.find({}, {:skip => (page-1)*per_page,
+                                 :limit => per_page,
+                                 :sort => [["created_at", -1]]})
     end
 
     def remove_error(error_id)
-      object_id = error_id
-      if error_id.kind_of?(String)
-        object_id = Mongo::ObjectID.from_string(error_id)
-      end
-
-      self.error_collection.remove(:_id => object_id, :channel_id => @name)
+      self.error_collection.remove(:_id => error_id)
     end
 
     def retry_error(error)
@@ -34,7 +31,7 @@ module Magent
     end
 
     def error_collection
-      @error_collection ||= Magent.database.collection("errors")
+      @error_collection ||= Magent.database.collection("#{@name}-errors")
     end
   end # Channel
 end

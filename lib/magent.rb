@@ -3,6 +3,8 @@ $:.unshift(File.dirname(__FILE__)) unless
 
 require 'mongo'
 require 'set'
+require 'uuidtools'
+
 require 'magent/utils'
 require 'magent/generic_channel'
 require 'magent/channel'
@@ -11,7 +13,7 @@ require 'magent/actor'
 require 'magent/processor'
 
 module Magent
-  VERSION = '0.1.3'
+  VERSION = '0.2'
 
   def self.connection
     @@connection ||= Mongo::Connection.new(nil, nil, :auto_reconnect => true)

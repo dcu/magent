@@ -1,64 +1,43 @@
 module Magent
   class GenericChannel
+    attr_reader :name
+
     def initialize(name)
       @name = name
-
-      if !collection.find_one({:_id => @name}, {:fields => [:_id]})
-        collection.save({:_id => @name, :messages => []})
-      end
     end
 
     def enqueue(message)
-      collection.update({:_id => @name}, {:$push => {:messages => message}, :$inc => {:message_count => 1}}, :repsert => true)
+      collection.save({:_id => generate_uid, :message => message, :priority => 3, :created_at => Time.now.to_i})
     end
 
     def message_count
-      channel = collection.find({:_id => @name}, :fields => [:message_count]).next_object
-      if channel
-        channel["message_count"] || 0
-      else
-        0
-      end
+      collection.count # TODO: number of processed messages (create a collection for stats)
     end
 
     def queue_count
-      Magent.database.eval(%@
-        function queue_count() {
-          var selector = {_id: '#{@name}'};
-          var q = db.channels.findOne(selector, {messages: 1 });
-          return q.messages.length;
-        }
-      @)
+      collection.count
     end
 
     def dequeue
-      Magent.database.eval(%@
-        function dequeue() {
-          var selector = {_id: '#{@name}'};
-          var q = db.channels.findOne(selector, {messages: 1 });
-          var m = q.messages[0];
-          if(m)
-            db.channels.update(selector, { $pop: { messages : -1 } })
-          return m;
-        }
-      @)
+      if m = self.next_message
+        m["message"]
+      end
+    end
+
+    def next_message
+      Magent.database.command(OrderedHash[:findandmodify, @name,
+                               :sort, [{:priority => -1}, {:created_at => 1}],
+                               :remove, true
+                              ])["value"]
     end
 
     def collection
-      self.class.collection
+      @collection ||= Magent.database.collection(@name)
     end
 
-    def self.collection
-      @collection ||= Magent.database.collection("channels")
-    end
-
-    def self.all(&block)
-      cursor = collection.find({}, :fields => [:_id])
-      if block_given?
-        cursor.map {|c| name = c["_id"]; yield name; name }
-      else
-        cursor.map {|c| c["_id"] }
-      end
+    protected
+    def generate_uid
+      UUIDTools::UUID.random_create.hexdigest
     end
   end # GenericChannel
 end

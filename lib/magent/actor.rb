@@ -23,8 +23,7 @@ module Magent
       end
 
       def can_handle?(action)
-        return false if @actions.nil?
-        @actions.include?(action.to_s)
+        actions.include?(action.to_s)
       end
 
       def channel
