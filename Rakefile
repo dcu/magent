@@ -15,7 +15,7 @@ $hoe = Hoe.spec 'magent' do
   self.post_install_message = ''
   self.rubyforge_name       = self.name
   self.extra_deps         = [['mongo','>= 0.18.2'],
-                             ['uuidtools, '>= 2.0.0']]
+                             ['uuidtools', '>= 2.0.0']]
 end
 
 require 'newgem/tasks'
