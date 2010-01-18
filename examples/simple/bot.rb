@@ -3,10 +3,10 @@ require 'magent'
 
 # Use: magent /path/to/this/file
 
-Magent.push("/bots", :echo, "hello, world")
-Magent.push("/bots", :do_task, "File", :exist?, "/etc/passwd")
-Magent.push("/bots", :echo, "Press ctrl+c to close")
-Magent.push("/bots", :do_not_exist, "you should not see this message")
+Magent.push("bots", :echo, "hello, world")
+Magent.push("bots", :do_task, "File", :exist?, "/etc/passwd")
+Magent.push("bots", :echo, "Press ctrl+c to close")
+Magent.push("bots", :do_not_exist, "you should not see this message")
 
 class Bot
   include Magent::Actor

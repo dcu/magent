@@ -1,10 +1,10 @@
 $:.unshift File.dirname(__FILE__)+"/../../lib/"
 require 'magent'
 
-Magent.push("/stats", :calc)
-Magent.push("/stats", :calc)
-Magent.push("/stats", :calc)
-Magent.push("/stats", :calc)
+Magent.push("stats", :calc)
+Magent.push("stats", :calc)
+Magent.push("stats", :calc)
+Magent.push("stats", :calc)
 
 class Stats
   include Magent::Actor

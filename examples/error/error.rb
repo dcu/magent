@@ -1,7 +1,7 @@
 $:.unshift File.dirname(__FILE__)+"/../../lib/"
 require 'magent'
 
-Magent.push("/errors", :fail, "this is a fail")
+Magent.push("errors", :fail, "this is a fail")
 
 class Error
   include Magent::Actor
