@@ -2,11 +2,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{magent}
-  s.version = "0.2"
+  s.version = "0.3"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["David Cuadrado"]
-  s.date = %q{2010-01-06}
+  s.date = %q{2010-01-19}
   s.default_executable = %q{magent}
   s.description = %q{Simple job queue system based on mongodb}
   s.email = ["krawek@gmail.com"]
