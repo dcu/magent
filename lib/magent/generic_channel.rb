@@ -25,7 +25,7 @@ module Magent
     end
 
     def next_message
-      Magent.database.command(OrderedHash[:findandmodify, @name,
+      Magent.database.command(BSON::OrderedHash[:findandmodify, @name,
                                :sort, [{:priority => -1}, {:created_at => 1}],
                                :remove, true
                               ])["value"]

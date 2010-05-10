@@ -2,11 +2,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{magent}
-  s.version = "0.3"
+  s.version = "0.4"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["David Cuadrado"]
-  s.date = %q{2010-01-19}
+  s.date = %q{2010-05-10}
   s.default_executable = %q{magent}
   s.description = %q{Simple job queue system based on mongodb}
   s.email = ["krawek@gmail.com"]
@@ -18,7 +18,7 @@ Gem::Specification.new do |s|
   s.rdoc_options = ["--main", "README.rdoc"]
   s.require_paths = ["lib"]
   s.rubyforge_project = %q{magent}
-  s.rubygems_version = %q{1.3.5}
+  s.rubygems_version = %q{1.3.6}
   s.summary = %q{Simple job queue system based on mongodb}
   s.test_files = ["test/test_helper.rb", "test/test_magent.rb"]
 
@@ -27,17 +27,20 @@ Gem::Specification.new do |s|
     s.specification_version = 3
 
     if Gem::Version.new(Gem::RubyGemsVersion) >= Gem::Version.new('1.2.0') then
-      s.add_runtime_dependency(%q<mongo>, [">= 0.18.2"])
+      s.add_runtime_dependency(%q<mongo>, [">= 0.1.0"])
       s.add_runtime_dependency(%q<uuidtools>, [">= 2.0.0"])
-      s.add_development_dependency(%q<hoe>, [">= 2.3.3"])
+      s.add_development_dependency(%q<rubyforge>, [">= 2.0.4"])
+      s.add_development_dependency(%q<hoe>, [">= 2.6.0"])
     else
-      s.add_dependency(%q<mongo>, [">= 0.18.2"])
+      s.add_dependency(%q<mongo>, [">= 0.1.0"])
       s.add_dependency(%q<uuidtools>, [">= 2.0.0"])
-      s.add_dependency(%q<hoe>, [">= 2.3.3"])
+      s.add_dependency(%q<rubyforge>, [">= 2.0.4"])
+      s.add_dependency(%q<hoe>, [">= 2.6.0"])
     end
   else
-    s.add_dependency(%q<mongo>, [">= 0.18.2"])
+    s.add_dependency(%q<mongo>, [">= 0.1.0"])
     s.add_dependency(%q<uuidtools>, [">= 2.0.0"])
-    s.add_dependency(%q<hoe>, [">= 2.3.3"])
+    s.add_dependency(%q<rubyforge>, [">= 2.0.4"])
+    s.add_dependency(%q<hoe>, [">= 2.6.0"])
   end
 end

@@ -14,7 +14,7 @@ $hoe = Hoe.spec 'magent' do
   self.developer 'David Cuadrado', 'krawek@gmail.com'
   self.post_install_message = ''
   self.rubyforge_name       = self.name
-  self.extra_deps         = [['mongo','>= 0.18.2'],
+  self.extra_deps         = [['mongo','>= 0.1.0'],
                              ['uuidtools', '>= 2.0.0']]
 end
 
