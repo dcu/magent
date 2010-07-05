@@ -13,10 +13,33 @@ require 'magent/actor'
 require 'magent/processor'
 
 module Magent
-  VERSION = '0.4'
+  VERSION = '0.4.1'
+
+  @@db_name = 'magent'
+  @@host = 'localhost'
+  @@port = '27017'
+  @@username = ''
+  @@password = ''
+
+  def self.host(host,port)
+    @@host = host
+    @@port = port
+  end
+
+  def self.auth(username,password)
+    @@username = username
+    @@password = password
+  end
+
+  def self.db_name(db_name)
+    @@db_name = db_name
+  end
 
   def self.connection
-    @@connection ||= Mongo::Connection.new(nil, nil, :auto_reconnect => true)
+    return @@connection if defined? @@connection  
+    @@connection = Mongo::Connection.new(@@host, @@port, :auto_reconnect => true)
+    @@connection.add_auth(@@db_name, @@username, @@password) if @@username!='' && @@password!=''
+    return @@connection
   end
 
   def self.connection=(new_connection)
@@ -28,9 +51,7 @@ module Magent
   end
 
   def self.database
-    @@database
+    @@database ||= Magent.connection.db(@@db_name)
   end
 end
-
-Magent.database = 'magent'
 
