@@ -18,12 +18,16 @@ module Magent
   @@db_name = 'magent'
   @@host = 'localhost'
   @@port = '27017'
-  @@username = ''
-  @@password = ''
+  @@username = nil
+  @@password = nil
 
-  def self.host(host,port)
+  def self.host=(host)
     @@host = host
     @@port = port
+  end
+
+  def self.port=(port)
+    @@port = 27017
   end
 
   def self.auth(username,password)
@@ -31,15 +35,16 @@ module Magent
     @@password = password
   end
 
-  def self.db_name(db_name)
+  def self.db_name=(db_name)
     @@db_name = db_name
   end
 
   def self.connection
-    return @@connection if defined? @@connection  
-    @@connection = Mongo::Connection.new(@@host, @@port, :auto_reconnect => true)
-    @@connection.add_auth(@@db_name, @@username, @@password) if @@username!='' && @@password!=''
-    return @@connection
+    return @@connection if defined?(@@connection)
+    @@connection = Mongo::Connection.new(@@host, @@port)
+    @@connection.add_auth(@@db_name, @@username, @@password) if @@username && @@password
+
+    @@connection
   end
 
   def self.connection=(new_connection)
