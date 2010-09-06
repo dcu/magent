@@ -13,7 +13,7 @@ require 'magent/actor'
 require 'magent/processor'
 
 module Magent
-  VERSION = '0.4.1'
+  VERSION = '0.4.2'
 
   @@db_name = 'magent'
   @@host = 'localhost'
