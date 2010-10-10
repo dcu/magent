@@ -4,3 +4,4 @@ lib/couchmapper
 lib/discm
 log/*
 public/stylesheets/**/*.css
+.bundle
