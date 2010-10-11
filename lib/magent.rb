@@ -57,14 +57,32 @@ module Magent
     raise 'Set config before connecting. Magent.config = {...}' if config.blank?
 
     env = config_for_environment(environment)
-    MongoMapper.connection = Mongo::Connection.new(env['host'], env['port'], options)
-    MongoMapper.database = env['database']
-    MongoMapper.database.authenticate(env['username'], env['password']) if env['username'] && env['password']
+    Magent.connection = Mongo::Connection.new(env['host'], env['port'], options)
+    Magent.database = env['database']
+    Magent.database.authenticate(env['username'], env['password']) if env['username'] && env['password']
   end
 
   def self.setup(config, environment = nil, options = {})
     self.config = config
     connect(environment, options)
+  end
+
+  # deprecated
+  def self.host=(host)
+    @@config['host'] = host
+  end
+
+  def self.port=(port)
+    @@config['port'] = port
+  end
+
+  def self.db_name=(db_name)
+    @@database_name = db_name
+  end
+
+  def self.auth(username, passwd)
+    @@config['username'] = username
+    @@config['password'] = passwd
   end
 
   private
