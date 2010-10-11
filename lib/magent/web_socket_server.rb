@@ -12,7 +12,7 @@ module Magent
         @sids = {}
 
         EventMachine.add_periodic_timer(options.delete(:interval)||10) do
-          webchannel = Websocket::Channel.new(Magent.config["websocket_channel"]||"magent.websocket")
+          webchannel = Magent::WebSocketChannel.new(Magent.config["websocket_channel"]||"magent.websocket")
           puts @channels.inspect
           while v = webchannel.next_message
             message = v["message"]
