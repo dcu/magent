@@ -12,7 +12,7 @@ module Magent
     end
 
     def self.instance
-      @channel ||= self.new("magent.websocket")
+      @channel ||= self.new(Magent.config["websocket_channel"]||"magent.websocket")
     end
   end
 end
