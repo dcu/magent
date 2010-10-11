@@ -1,3 +1,4 @@
+require 'magent/web_socket_channel'
 module Magent
   class WebSocketServer
     def initialize(options = {})

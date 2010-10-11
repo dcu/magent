@@ -12,10 +12,17 @@ require 'magent/push'
 require 'magent/actor'
 require 'magent/processor'
 
-MongoMapper.setup(YAML.load_file(Rails.root.join('config', 'database.yml')),
-                  Rails.env, { :logger => Rails.logger, :passenger => false })
+if defined?(EventMachine::WebSocket)
+  require 'magent/web_socket_server'
+end
+
 module Magent
   @@database_name = "magent"
+
+  @@config = {
+    "host" => "0.0.0.0",
+    "port" => 27017
+  }
 
   def self.connection
     @@connection ||= Mongo::Connection.new
@@ -35,12 +42,11 @@ module Magent
   end
 
   def self.database
-    @@database ||= Magent.connection.db(@@db_name)
+    @@database ||= Magent.connection.db(@@database_name)
   end
 
   def self.config
-    raise(ArgumentError, 'Set config before connecting. MongoMapper.config = {...}') unless defined?(@@config)
-    @@cconfig
+    @@config
   end
 
   def self.config=(config)
