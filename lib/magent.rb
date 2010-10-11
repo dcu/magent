@@ -50,7 +50,7 @@ module Magent
   end
 
   def self.config=(config)
-    @@config = hash
+    @@config = config
   end
 
   def self.connect(environment, options={})
