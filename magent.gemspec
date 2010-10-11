@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["David A. Cuadrado"]
-  s.date = %q{2010-10-10}
+  s.date = %q{2010-10-11}
   s.default_executable = %q{magent}
   s.description = %q{Simple job queue system based on mongodb}
   s.email = %q{krawek@gmail.com}
@@ -43,6 +43,7 @@ Gem::Specification.new do |s|
      "lib/magent/processor.rb",
      "lib/magent/push.rb",
      "lib/magent/utils.rb",
+     "lib/magent/web_socket_channel.rb",
      "lib/magent/web_socket_server.rb",
      "magent.gemspec",
      "script/console",
