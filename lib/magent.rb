@@ -12,39 +12,17 @@ require 'magent/push'
 require 'magent/actor'
 require 'magent/processor'
 
+MongoMapper.setup(YAML.load_file(Rails.root.join('config', 'database.yml')),
+                  Rails.env, { :logger => Rails.logger, :passenger => false })
 module Magent
-  VERSION = '0.4.2'
-
-  @@db_name = 'magent'
-  @@host = 'localhost'
-  @@port = '27017'
-  @@username = nil
-  @@password = nil
-
-  def self.host=(host)
-    @@host = host
-    @@port = port
-  end
-
-  def self.port=(port)
-    @@port = 27017
-  end
-
-  def self.auth(username,password)
-    @@username = username
-    @@password = password
-  end
-
-  def self.db_name=(db_name)
-    @@db_name = db_name
-  end
+  @@database_name = "magent"
 
   def self.connection
-    return @@connection if defined?(@@connection)
-    @@connection = Mongo::Connection.new(@@host, @@port)
-    @@connection.add_auth(@@db_name, @@username, @@password) if @@username && @@password
+    @@connection ||= Mongo::Connection.new
+  end
 
-    @@connection
+  def self.logger
+    connection.logger
   end
 
   def self.connection=(new_connection)
@@ -52,11 +30,53 @@ module Magent
   end
 
   def self.database=(name)
-    @@database = Magent.connection.db(name)
+    @@database = nil
+    @@database_name = name
   end
 
   def self.database
     @@database ||= Magent.connection.db(@@db_name)
+  end
+
+  def self.config
+    raise(ArgumentError, 'Set config before connecting. MongoMapper.config = {...}') unless defined?(@@config)
+    @@cconfig
+  end
+
+  def self.config=(config)
+    @@config = hash
+  end
+
+  def self.connect(environment, options={})
+    raise 'Set config before connecting. Magent.config = {...}' if config.blank?
+
+    env = config_for_environment(environment)
+    MongoMapper.connection = Mongo::Connection.new(env['host'], env['port'], options)
+    MongoMapper.database = env['database']
+    MongoMapper.database.authenticate(env['username'], env['password']) if env['username'] && env['password']
+  end
+
+  def self.setup(config, environment = nil, options = {})
+    self.config = config
+    connect(environment, options)
+  end
+
+  private
+  def self.config_for_environment(environment)
+    env = environment ? config[environment] : config
+
+    return env if env['uri'].blank?
+
+    uri = URI.parse(env['uri'])
+    raise InvalidScheme.new('must be mongodb') unless uri.scheme == 'mongodb'
+
+    {
+      'host'     => uri.host,
+      'port'     => uri.port,
+      'database' => uri.path.gsub(/^\//, ''),
+      'username' => uri.user,
+      'password' => uri.password,
+    }
   end
 end
 
