@@ -38,7 +38,7 @@ module Magent
                   @sids[key] = sid
                   ws.onclose do
                     @channel_ids.delete(key)
-                    @channels.delete(channel_id).unsubscribe(sid)
+                    @channels[channel_id].unsubscribe(sid)
                     @sids.delete(key)
                   end
 
