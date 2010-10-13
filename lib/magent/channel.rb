@@ -4,6 +4,7 @@ module Magent
       super([message, args])
     end
 
+    # TODO: move to its own module
     def failed(info)
       error_collection.save(info.merge({:_id => generate_uid, :channel => @name, :created_at => Time.now.utc}))
     end
