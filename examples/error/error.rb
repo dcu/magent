@@ -28,6 +28,6 @@ end
 Magent.register(Error.new)
 
 if $0 == __FILE__
-  Magent::Processor.new(Magent.current_actor).run!
+  Magent::Processor.new(Error.channel).run!
 end
 

@@ -22,6 +22,6 @@ end
 Magent.register(Stats.new)
 
 if $0 == __FILE__
-  Magent::Processor.new(Magent.current_actor).run!
+  Magent::Processor.new(Stats.channel).run!
 end
 

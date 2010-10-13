@@ -11,13 +11,14 @@ def usage(option_parser, error = nil)
   exit 1
 end
 
-options = {:piddir => "/tmp"}
+options = {:piddir => "/tmp", :type => :async}
 
 optparser = OptionParser.new do |opts|
   opts.banner = "Usage: #{$0} [options] <start|stop|restart>\n\nExample: magent -d -P /tmp my_queue restart\n\nOptions:"
 
   opts.on("-a PATH", "--agent=PATH", "Path to agent") do |o|
     options[:agent] = o
+    options[:type] = :actor
   end
 
   opts.on("-t ID", "--identifier=ID", "Identifier") do |o|
@@ -76,7 +77,7 @@ class Controller
     if @options[:daemonize] && @options[:piddir]
       run_as_daemon
     else
-      Magent::Processor.new(@queue).run!
+      Magent::Processor.new(self.channel).run!
     end
   end
 
@@ -104,6 +105,10 @@ class Controller
     start
   end
 
+  def channel
+    @channel ||= (options[:type] == :sync) ? Magent::AsyncQueue.new(@queue) : Magent::ActorChannel.new(@queue)
+  end
+
   private
   def run_as_daemon
     daemonize
@@ -115,7 +120,7 @@ class Controller
       end
     end
 
-    Magent::Processor.new(@queue).run!
+    Magent::Processor.new(self.channel).run!
   end
 
   def pid_file

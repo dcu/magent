@@ -1,4 +1,5 @@
 $:.unshift File.dirname(__FILE__)+"/../../lib/"
+require 'rubygems'
 require 'magent'
 
 # Use: magent /path/to/this/file
@@ -32,6 +33,6 @@ end
 Magent.register(Bot.new)
 
 if $0 == __FILE__
-  Magent::Processor.new(Magent.current_actor).run!
+  Magent::Processor.new(Bot.channel).run!
 end
 

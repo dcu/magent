@@ -1,13 +1,14 @@
 $:.unshift(File.dirname(__FILE__)) unless
   $:.include?(File.dirname(__FILE__)) || $:.include?(File.expand_path(File.dirname(__FILE__)))
 
+require 'rubygems'
 require 'mongo'
 require 'set'
 require 'uuidtools'
 
 require 'magent/utils'
 require 'magent/generic_channel'
-require 'magent/channel'
+require 'magent/actor_channel'
 require 'magent/push'
 require 'magent/actor'
 require 'magent/processor'

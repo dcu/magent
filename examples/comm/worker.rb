@@ -25,6 +25,6 @@ end
 Magent.register(Worker.new)
 
 if $0 == __FILE__
-  Magent::Processor.new(Magent.current_actor).run!
+  Magent::Processor.new(Worker.channel).run!
 end
 

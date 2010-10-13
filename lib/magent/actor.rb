@@ -28,7 +28,7 @@ module Magent
 
       def channel
         @channel ||= begin
-          Channel.new(self.channel_name)
+          ActorChannel.new(self.channel_name)
         end
       end
 
@@ -74,5 +74,9 @@ module Magent
 
   def self.current_actor
     @current_actor
+  end
+
+  def self.current_channel
+    self.current_actor.channel
   end
 end
