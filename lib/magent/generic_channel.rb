@@ -25,12 +25,8 @@ module Magent
     end
 
     def next_message
-      rec = Magent.database.command(BSON::OrderedHash[:findandmodify, @name,
-        :sort, [{:priority => -1}, {:created_at => 1}],
-        :remove, true
-      ]) rescue {}
-
-      rec["value"]
+      collection.find_and_modify(:sort => [[:priority, Mongo::ASCENDING], [:created_at, Mongo::DESCENDING]],
+                                 :remove => true) rescue {}
     end
 
     def collection
