@@ -13,6 +13,9 @@ require 'magent/push'
 require 'magent/actor'
 require 'magent/processor'
 
+require 'magent/async'
+require 'magent/async_channel'
+
 if defined?(EventMachine::WebSocket)
   require 'magent/web_socket_server'
 end
