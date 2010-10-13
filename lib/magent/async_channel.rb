@@ -11,7 +11,7 @@ module Magent
     end
 
     def process!
-      klass, id, method_chain = self.next_message
+      klass, id, method_chain = self.dequeue
 
       target = resolve_target(klass, id)
       method_chain.each do |c|

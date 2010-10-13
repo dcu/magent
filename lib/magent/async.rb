@@ -9,9 +9,9 @@
 #     end
 #
 #     async call:
-#         Processor.find(id).async(:my_queue).process.commit!
+#         Processor.find(id).async(:my_queue).process.commit!(priority)
 #     chained methods:
-#         Processor.async(:my_queue, true).find(1).process.commit!
+#         Processor.async(:my_queue, true).find(1).process.commit!(priority)
 #
 
 module Magent
@@ -26,18 +26,17 @@ module Magent
     class Proxy
       instance_methods.each { |m| undef_method m unless m =~ /(^__|^nil\?$|^send$|proxy_|^object_id$)/ }
 
-      def initialize(queue, target, priority = 3, test = false)
+      def initialize(queue, target, test = false)
         @queue = queue
         @method_chain = []
         @target = target
         @test = test
-        @priority = priority
 
         @channel = Magent::AsyncChannel.new(@queue)
       end
 
-      def commit!
-        @channel.push(@target, @method_chain, @priority)
+      def commit!(priority = 3)
+        @channel.push(@target, @method_chain, priority)
 
         if @test
           target = @target
@@ -57,9 +56,9 @@ module Magent
     end
 
     module Methods
-      # @question.async(:judge).on_view_question.commit!
-      def async(queue = :default, priority = 3, test = false)
-        Magent::Async::Proxy.new(queue, self, priority, test)
+      # @question.async(:judge).on_view_question.commit!(1)
+      def async(queue = :default, test = false)
+        Magent::Async::Proxy.new(queue, self, test)
       end
     end
   end # Async

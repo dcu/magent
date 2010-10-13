@@ -4,7 +4,7 @@ module Magent
   end
 
   def self.channel(name)
-    self.channels[name] ||= Channel.new(name)
+    self.channels[name] ||= ActorChannel.new(name)
   end
 
   def self.channels
