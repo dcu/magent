@@ -6,8 +6,8 @@ module Magent
       @name = name
     end
 
-    def enqueue(message)
-      collection.save({:_id => generate_uid, :message => message, :priority => 3, :created_at => Time.now.to_i})
+    def enqueue(message, priority = 3)
+      collection.save({:_id => generate_uid, :message => message, :priority => priority, :created_at => Time.now.to_i})
     end
 
     def message_count
