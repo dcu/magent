@@ -1,13 +1,13 @@
 module Magent
   class ActorChannel < GenericChannel
-    def enqueue(message, args)
-      super([message, args])
+    def push(message, args)
+      enqueue([message, args])
     end
 
-    def process!
+    def process!(message)
       @actor = Magent.current_actor
 
-      @method, @payload = self.dequeue
+      @method, @payload = message
       return false if @method.nil?
 
       sucess = @actor._run_tasks

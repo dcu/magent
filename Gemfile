@@ -1,7 +1,6 @@
 source 'http://rubygems.org'
 
-gem 'mongo'
-gem 'bson'
+gem 'mongo', '~> 1.0'
 gem 'uuidtools'
 
 gem 'em-websocket'

@@ -10,8 +10,8 @@ module Magent
       end
     end
 
-    def process!
-      klass, id, method_chain = self.dequeue
+    def process!(message)
+      klass, id, method_chain = message
 
       return false if method_chain.nil?
 

@@ -1,9 +1,14 @@
 #!/usr/bin/env ruby
 
+if File.exist?("config/environments") && File.exist?("app/models") # rails
+  require Dir.getwd + '/config/environment'
+end
+
 $:.unshift File.dirname(__FILE__)+"/../lib/"
 require 'magent'
 require 'optparse'
 require 'fileutils'
+
 
 def usage(option_parser, error = nil)
   $stderr.puts error if error
@@ -11,14 +16,18 @@ def usage(option_parser, error = nil)
   exit 1
 end
 
-options = {:piddir => "/tmp", :type => :async}
+options = {:piddir => "/tmp", :type => :async, :queue => :default}
 
 optparser = OptionParser.new do |opts|
-  opts.banner = "Usage: #{$0} [options] <start|stop|restart>\n\nExample: magent -d -P /tmp my_queue restart\n\nOptions:"
+  opts.banner = "Usage: #{$0} [options] -Q <queue> <start|stop|restart>\n\nExample: magent -d -P /tmp -Q default restart\n\nOptions:"
 
   opts.on("-a PATH", "--agent=PATH", "Path to agent") do |o|
     options[:agent] = o
     options[:type] = :actor
+  end
+
+  opts.on("-Q QUEUE", "--queue=QUEUE", "queue to use. default=default") do |o|
+    options[:queue] = o
   end
 
   opts.on("-t ID", "--identifier=ID", "Identifier") do |o|
@@ -44,18 +53,12 @@ optparser = OptionParser.new do |opts|
 end
 
 args = []
-queue = nil
 begin
   args = optparser.parse!
-  queue = args.shift
 rescue => e
   $stderr.puts e
   $stderr.puts optparser
   exit 0
-end
-
-if !queue
-  usage(optparser, "Error: <queue> is required")
 end
 
 if options[:agent]
@@ -63,13 +66,16 @@ if options[:agent]
 end
 
 class Controller
-  def initialize(queue, opts)
-    @queue = queue
+  attr_reader :options
+
+  def initialize(opts)
     @options = opts
+
+    @queue = @options[:queue]
 
     @options[:log_path] ||= Dir.getwd
 
-    @identity = @options[:identifier] || Magent::Utils.underscore(@queue.to_s)
+    @identity = @options[:identifier] || Magent::Utils.underscore(@options[:queue].to_s)
     @identity << "-#{Socket.gethostname.split('.')[0]}"
   end
 
@@ -106,7 +112,7 @@ class Controller
   end
 
   def channel
-    @channel ||= (options[:type] == :sync) ? Magent::AsyncQueue.new(@queue) : Magent::ActorChannel.new(@queue)
+    @channel ||= (@options[:type] == :sync) ? Magent::AsyncQueue.new(@queue) : Magent::ActorChannel.new(@queue)
   end
 
   private
@@ -141,4 +147,4 @@ class Controller
   end
 end
 
-Controller.new(queue, options).send(args.shift)
+Controller.new(options).send(args.shift)

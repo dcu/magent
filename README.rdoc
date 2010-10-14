@@ -18,13 +18,49 @@ see examples/
 
 == REQUIREMENTS:
 
-* mongodb >= 1.4
+* mongodb >= 1.6
 * mongo   >= 1.0.0 (gem install mongo)
 
 == INSTALL:
 
 * rake gem
 * sudo gem install pkg/*.gem
+
+== USAGE:
+
+include Magent::Async in your classes:
+
+    class MyClass
+      include Magent::Async
+
+      def self.process_task
+        puts "Processing task"
+      end
+    end
+
+enqueue with priority 1:
+
+    MyClass.async.process_task.commit!(1)
+
+start the worker:
+
+    magent start
+
+
+== RAILS SUPPORT
+
+= initializer
+
+    Magent.setup(YAML.load_file(Rails.root.join('config', 'magent.yml')),
+                 Rails.env, { :logger => Rails.logger }
+
+
+= starting the worker
+
+to run the jobs in rails type:
+
+    rake magent:start
+
 
 == LICENSE:
 

@@ -1,6 +1,6 @@
 module Magent
   def self.push(channel_name, method, *args)
-    self.channel(channel_name.to_s).enqueue(method, args)
+    self.channel(channel_name.to_s).push(method, args)
   end
 
   def self.channel(name)

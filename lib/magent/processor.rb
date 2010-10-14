@@ -24,6 +24,7 @@ module Magent
         message = @channel.dequeue
         begin
           if message && @channel.process!(message)
+            puts "Processed #{message.inspect}"
             delay = 0
             processed_messages += 1
             if processed_messages > 20
