@@ -21,8 +21,9 @@ module Magent
       loop do
         break if @shutdown
 
+        message = @channel.dequeue
         begin
-          if @channel.process!
+          if message && @channel.process!(message)
             delay = 0
             processed_messages += 1
             if processed_messages > 20
@@ -34,9 +35,7 @@ module Magent
           end
         rescue SystemExit
         rescue Exception => e
-          $stderr.puts "Error while executing #{@method.inspect} #{@payload.inspect}"
-          $stderr.puts "#{e.to_s}\n#{e.backtrace.join("\t\n")}"
-          @channel.failed(:message => e.message, :method => @method, :payload => @payload, :backtrace => e.backtrace, :date => Time.now.utc)
+          @channel.failed(:error => e.message, :message => message, :backtrace => e.backtrace, :date => Time.now.utc)
         ensure
         end
 

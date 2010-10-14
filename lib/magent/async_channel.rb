@@ -18,7 +18,6 @@ module Magent
       target = resolve_target(klass, id)
 
       method_chain.each do |c|
-        puts "#{target.inspect} -> #{c.inspect}"
         target = target.send(c[0], *c[1])
       end
 

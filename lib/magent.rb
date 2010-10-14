@@ -6,6 +6,8 @@ require 'mongo'
 require 'set'
 require 'uuidtools'
 
+require 'magent/failure'
+
 require 'magent/utils'
 require 'magent/generic_channel'
 require 'magent/actor_channel'

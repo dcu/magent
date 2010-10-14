@@ -1,5 +1,7 @@
 module Magent
   class GenericChannel
+    include Magent::Failure
+
     attr_reader :name
 
     def initialize(name)
