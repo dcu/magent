@@ -61,6 +61,10 @@ rescue => e
   exit 0
 end
 
+if args.empty?
+  usage(optparser, "not enough arguments")
+end
+
 if options[:agent]
   load options[:agent]
 end
@@ -77,6 +81,8 @@ class Controller
 
     @identity = @options[:identifier] || Magent::Utils.underscore(@options[:queue].to_s)
     @identity << "-#{Socket.gethostname.split('.')[0]}"
+
+    $stderr.puts ">> Starting magent in #{@options[:type]} model"
   end
 
   def start
@@ -112,7 +118,7 @@ class Controller
   end
 
   def channel
-    @channel ||= (@options[:type] == :sync) ? Magent::AsyncQueue.new(@queue) : Magent::ActorChannel.new(@queue)
+    @channel ||= (@options[:type] == :async) ? Magent::AsyncChannel.new(@queue) : Magent::ActorChannel.new(@queue)
   end
 
   private

@@ -36,6 +36,7 @@ module Magent
           end
         rescue SystemExit
         rescue Exception => e
+          $stderr.puts "Error processing #{message.inspect} => #{e.message}"
           @channel.failed(:error => e.message, :message => message, :backtrace => e.backtrace, :date => Time.now.utc)
         ensure
         end

@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{magent}
-  s.version = "1.0.0"
+  s.version = "0.5.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["David A. Cuadrado"]
-  s.date = %q{2010-10-11}
+  s.date = %q{2010-10-13}
   s.default_executable = %q{magent}
   s.description = %q{Simple job queue system based on mongodb}
   s.email = %q{krawek@gmail.com}
@@ -34,17 +34,23 @@ Gem::Specification.new do |s|
      "examples/comm/run.rb",
      "examples/comm/worker.rb",
      "examples/error/error.rb",
+     "examples/mongomapper/async.rb",
      "examples/simple/bot.rb",
      "examples/stats/stats.rb",
      "lib/magent.rb",
      "lib/magent/actor.rb",
-     "lib/magent/channel.rb",
+     "lib/magent/actor_channel.rb",
+     "lib/magent/async.rb",
+     "lib/magent/async_channel.rb",
+     "lib/magent/failure.rb",
      "lib/magent/generic_channel.rb",
      "lib/magent/processor.rb",
      "lib/magent/push.rb",
+     "lib/magent/railtie.rb",
      "lib/magent/utils.rb",
      "lib/magent/web_socket_channel.rb",
      "lib/magent/web_socket_server.rb",
+     "lib/tasks/magent.rake",
      "magent.gemspec",
      "script/console",
      "test/test_helper.rb",
@@ -62,6 +68,7 @@ Gem::Specification.new do |s|
      "examples/error/error.rb",
      "examples/comm/run.rb",
      "examples/comm/worker.rb",
+     "examples/mongomapper/async.rb",
      "examples/stats/stats.rb"
   ]
 

@@ -5,7 +5,7 @@ module Magent
     attr_reader :name
 
     def initialize(name)
-      @name = name
+      @name = "magent.#{name}"
     end
 
     def enqueue(message, priority = 3)
