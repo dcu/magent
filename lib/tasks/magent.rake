@@ -4,8 +4,9 @@ namespace :magent do
     if env = Rake::Task["environment"]
       env.invoke
     end
-
-    Magent::Processor.new(Magent::AsyncChannel.new(ENV['QUEUE'] || 'default')).run!
+    queue = ENV['QUEUE'] || 'default'
+    puts "Starting magent working on #{queue}. #{Magent.config.inspect}"
+    Magent::Processor.new(Magent::AsyncChannel.new(queue)).run!
   end
 
   desc "display all errors"
@@ -48,8 +49,7 @@ namespace :magent do
     page = 1
 
     channel.error_collection.find({}).each do |error|
-      channel.error_collection.remove({:_id => error["_id"]})
-      Object.module_eval(error["channel_class"]).enqueue(error["message"])
+      channel.retry_error(error)
     end
   end
 end

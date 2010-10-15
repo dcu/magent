@@ -22,8 +22,8 @@ module Magent
     end
 
     def retry_error(error)
+      process!(error["message"])
       remove_error(error["_id"])
-      enqueue(error["message"])
     end
 
     def error_collection
