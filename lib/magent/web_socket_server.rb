@@ -44,6 +44,7 @@ module Magent
                   end
 
                   ws.send({:id => "ack", :key => key}.to_json)
+                  send(:on_ack, ws) if respond_to?(:on_ack)
                 else
                   ws.close_connection
                 end
