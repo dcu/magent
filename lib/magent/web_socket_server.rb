@@ -12,13 +12,14 @@ module Magent
         @channel_ids = {}
         @sids = {}
 
+        EM.run do
         EventMachine.add_periodic_timer(options.delete(:interval)||10) do
-          while v = Magent::WebSocketChannel.next_message
-            message = v["message"]
-            if message && (channel = @channels[message["channel_id"]])
+          while message = Magent::WebSocketChannel.dequeue
+            if (channel = @channels[message["channel_id"]])
               channel.push(message.to_json)
             end
           end
+        end
         end
 
         EventMachine::WebSocket.start(options) do |ws|
