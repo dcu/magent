@@ -13,13 +13,13 @@ module Magent
         @sids = {}
 
         EM.run do
-        EventMachine.add_periodic_timer(options.delete(:interval)||10) do
-          while message = Magent::WebSocketChannel.dequeue
-            if (channel = @channels[message["channel_id"]])
-              channel.push(message.to_json)
+          EventMachine.add_periodic_timer(options.delete(:interval)||10) do
+            while message = Magent::WebSocketChannel.dequeue
+              if (channel = @channels[message["channel_id"]])
+                channel.push(message.to_json)
+              end
             end
           end
-        end
         end
 
         EventMachine::WebSocket.start(options) do |ws|
@@ -27,41 +27,41 @@ module Magent
             ws.onmessage do |msg|
               data = JSON.parse(msg) rescue {}
 
-              case data["id"]
-              when 'start'
-                if data["channel_id"].present? && (channel_id = validate_channel_id(data["channel_id"]))
-                  key = generate_unique_key(data["key"])
-                  @channels[channel_id] ||= EM::Channel.new
-                  @channel_ids[key] = channel_id
+              if !handle_message(ws, data)
+                case data["id"]
+                when 'start'
+                  if data["channel_id"].present? && (channel_id = validate_channel_id(data["channel_id"]))
+                    key = generate_unique_key(data["key"])
+                    @channels[channel_id] ||= EM::Channel.new
+                    @channel_ids[key] = channel_id
 
-                  sid = @channels[channel_id].subscribe { |msg| ws.send(msg) }
+                    sid = @channels[channel_id].subscribe { |msg| ws.send(msg) }
 
-                  @sids[key] = sid
-                  ws.onclose do
-                    @channel_ids.delete(key)
-                    @channels[channel_id].unsubscribe(sid)
-                    @sids.delete(key)
+                    @sids[key] = sid
+                    ws.onclose do
+                      @channel_ids.delete(key)
+                      @channels[channel_id].unsubscribe(sid)
+                      @sids.delete(key)
+                    end
+
+                    ws.send({:id => "ack", :key => key}.to_json)
+                    send(:on_ack, ws) if respond_to?(:on_ack)
+                  else
+                    ws.close_connection
                   end
+                when 'chatmessage'
+                  key = data["key"]
+                  return invalid_key(ws) if key.blank? || @sids[key].blank?
 
-                  ws.send({:id => "ack", :key => key}.to_json)
-                  send(:on_ack, ws) if respond_to?(:on_ack)
-                else
-                  ws.close_connection
+                  channel_id = @channel_ids[key]
+
+                  if channel_id
+                    @channels[channel_id].push({:id => 'chatmessage', :from => user_name(key, @sids[key]), :message => data["message"]}.to_json)
+                  else
+                    ws.send({:id => 'announcement', :type => "error", :message => "cannot find the channel"}.to_json)
+                  end
                 end
-              when 'chatmessage'
-                key = data["key"]
-                return invalid_key(ws) if key.blank? || @sids[key].blank?
-
-                channel_id = @channel_ids[key]
-
-                if channel_id
-                  @channels[channel_id].push({:id => 'chatmessage', :from => user_name(key, @sids[key]), :message => data["message"]}.to_json)
-                else
-                  ws.send({:id => 'announcement', :type => "error", :message => "cannot find the channel"}.to_json)
-                end
-              else
-                handle_message(ws, data)
-              end
+              end # if
             end
           end
         end # EM::WebSocket
@@ -78,7 +78,7 @@ module Magent
     end
 
     def handle_message(ws, data)
-      ws.send({:id => 'announcement', :type => "error", :message => "unhandled message: #{data.inspect}"}.to_json)
+      false
     end
 
     protected
