@@ -7,10 +7,7 @@ module Magent
       $stdout.puts ">> Server running and up! #{options}}" if options[:debug]
 
       EventMachine.run do
-        @channel = EM::Channel.new
-        @channels = {}
-        @channel_ids = {}
-        @sids = {}
+        setup
 
         EM.run do
           EventMachine.add_periodic_timer(options.delete(:interval)||10) do
@@ -45,7 +42,7 @@ module Magent
                     end
 
                     ws.send({:id => "ack", :key => key}.to_json)
-                    send(:on_ack, ws) if respond_to?(:on_ack)
+                    send(:on_ack, ws, channel_id) if respond_to?(:on_ack)
                   else
                     ws.close_connection
                   end
@@ -56,7 +53,9 @@ module Magent
                   channel_id = @channel_ids[key]
 
                   if channel_id
-                    @channels[channel_id].push({:id => 'chatmessage', :from => user_name(key, @sids[key]), :message => data["message"]}.to_json)
+                    chat_message = {:id => 'chatmessage', :from => user_name(key, @sids[key]), :message => data["message"]}
+
+                    @channels[channel_id].push(validate_chat_message(channel_id, chat_message).to_json)
                   else
                     ws.send({:id => 'announcement', :type => "error", :message => "cannot find the channel"}.to_json)
                   end
@@ -72,6 +71,13 @@ module Magent
       self.new(options)
     end
 
+    def setup
+      @channel = EM::Channel.new
+      @channels = {}
+      @channel_ids = {}
+      @sids = {}
+    end
+
     protected
     def invalid_key(ws)
       ws.send({:id => 'announcement', :type => "error", :message => "you must provide your unique key"}.to_json)
@@ -79,6 +85,10 @@ module Magent
 
     def handle_message(ws, data)
       false
+    end
+
+    def validate_chat_message(channel_id, chat_message)
+      chat_message
     end
 
     protected
