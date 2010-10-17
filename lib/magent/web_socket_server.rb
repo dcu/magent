@@ -49,7 +49,7 @@ module Magent
                 end
               when 'chatmessage'
                 key = data["key"]
-                return invalid_key if key.blank? || @sids[key].blank?
+                return invalid_key(ws) if key.blank? || @sids[key].blank?
 
                 channel_id = @channel_ids[key]
 
