@@ -42,7 +42,6 @@ module Magent
         end
 
         sleep (delay*100.0).to_i/100.0
-        $stderr.puts delay.inspect
       end
     end
 
