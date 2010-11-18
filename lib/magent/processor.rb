@@ -41,7 +41,7 @@ module Magent
         ensure
         end
 
-        sleep delay
+        sleep (delay*100.0).to_i/100.0
       end
     end
 
