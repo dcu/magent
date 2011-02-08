@@ -1,7 +1,7 @@
 require 'magent'
 require 'rails'
 
-module MyPlugin
+module Magent
   class Railtie < Rails::Railtie
     rake_tasks do
       load "tasks/magent.rake"

@@ -18,7 +18,7 @@ require 'magent/processor'
 require 'magent/async'
 require 'magent/async_channel'
 
-require 'magent/railtie' if defined?(Rails)
+require 'magent/railtie' if defined?(Rails) && Rails.version >= "3.0.0"
 
 if defined?(EventMachine::WebSocket)
   require 'magent/web_socket_server'
