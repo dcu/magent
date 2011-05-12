@@ -1,6 +1,8 @@
 #!/usr/bin/env ruby
 
-if File.exist?("config/environments") && File.exist?("app/models") # rails
+if File.exists?("magent.init.rb")
+  require './magent.init'
+elsif File.exist?("config/environments") && File.exist?("app/models") # rails
   require Dir.getwd + '/config/environment'
 end
 
