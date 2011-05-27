@@ -76,5 +76,9 @@ module MagentWeb
         "#{name}(#{args})"
       end.join(" -> ")
     end
+
+    def channel_name_for(queue_id)
+      queue_id.to_s.match("magent\.([^\.]+)")[1]
+    end
   end
 end

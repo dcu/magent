@@ -1,0 +1,35 @@
+-count=0
+-skip = params[:skip].to_i
+%div(data-role="page" data-add-back-btn="true")
+  %div(data-role="header")
+    %h1
+      Failed Jobs for
+      &= channel_name_for(@queue.name)
+  %div(data-role="content")
+    %h1
+      Failed Jobs
+    -@errors.each do |document|
+      -message = document["message"]
+      -count+=1
+      %div(data-role="collapsible" data-collapsed=true)
+        %h1
+          &= "#{humanize_messages(document["message"].last)}: #{document["error"]}"
+        =haml :"shared/values", :layout => false, :locals => {:hash => document}
+        %div(data-role="navbar" data-iconpos="bottom")
+          %ul
+            %li
+              %a(href="/queues/#{@queue.name}/retry/#{document["_id"]}" data-icon="refresh")
+                Retry
+            %li
+              %a(href="/queues/#{@queue.name}/delete/#{document["_id"]}" data-icon="delete" data-theme="e")
+                Delete
+
+
+  %div(data-role="footer")
+    -if skip > 0
+      %a(href="/queues/#{@queue.name}/failed?skip=#{params[:skip].to_i-25}")
+        Previous
+    -if count >= 25
+      %a(href="/queues/#{@queue.name}/failed?skip=#{params[:skip].to_i+25}")
+        Next
+

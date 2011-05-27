@@ -38,7 +38,7 @@
       -elsif key =~ /_at$/
         %span.date_key
           &=k
-      -elsif ["name", "title"].include?(key)
+      -elsif ["name", "title", "error", "message"].include?(key)
         %span.name_key
           &=k
       -elsif key =~ /^_/
@@ -61,7 +61,7 @@
     -elsif key =~ /_at$/
       %span.date_value
         &=v
-    -elsif ["name", "title"].include?(key)
+    -elsif ["name", "title", "error", "message"].include?(key)
       %span.name_value
         &=v
     -elsif key =~ /^_/

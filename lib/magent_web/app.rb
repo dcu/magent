@@ -31,6 +31,38 @@ module MagentWeb
       haml :"queues/show"
     end
 
+    get "/queues/:id/failed" do
+      @queue = @database.collection(params[:id])
+      @errors_queue = @database.collection(params[:id]+".errors")
+      @errors = document_list(@errors_queue)
+
+      haml :"queues/failed"
+    end
+
+    get "/queues/:id/stats" do
+      @queue = @database.collection(params[:id])
+
+      haml :"queues/stats"
+    end
+
+    get "/queues/:queue_id/retry/:id" do
+      @errors_queue = @database.collection(params[:queue_id]+".errors")
+      @channel_name = channel_name_for(params[:queue_id])
+
+      channel = Magent::AsyncChannel.new(@channel_name)
+
+      doc = @errors_queue.find({:_id => params[:id]}).next_document
+      channel.enqueue_error(doc)
+
+      redirect "/queues/#{params[:queue_id]}/failed"
+    end
+
+    get "/queues/:queue_id/delete/:id" do
+      @errors_queue = @database.collection(params[:queue_id]+".errors")
+      @errors_queue.remove(:_id => params[:id])
+      redirect "/queues/#{params[:queue_id]}/failed"
+    end
+
     private
     def error_not_found
       status 404

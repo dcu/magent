@@ -26,6 +26,11 @@ module Magent
       remove_error(error["_id"])
     end
 
+    def enqueue_error(error)
+      enqueue(error["message"], 1)
+      remove_error(error["_id"])
+    end
+
     def error_collection
       @error_collection ||= Magent.database.collection("#{@name}.errors")
     end

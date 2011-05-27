@@ -1,16 +1,18 @@
 -count=0
 -skip = params[:skip].to_i
-%div(data-role="page")
+%div(data-role="page" data-add-back-btn="true")
   %div(data-role="header")
     %h1
       Queue:
       &=@title=@database.name+" / #{@queue.name}"
     %div{:"data-role" => "navbar"}
-      %div{:"data-role" => "controlgroup", :"data-type" => "horizontal"}
-        %a(href="/queues/#{@queue.name}/failed")
-          Failed
-        %a(href="/queues/#{@queue.name}/stats")
-          Stats
+      %ul
+        %li
+          %a(href="/queues/#{@queue.name}/failed" data-icon="alert")
+            Failed
+        %li
+          %a(href="/queues/#{@queue.name}/stats" data-icon="grid")
+            Stats
 
 
   %div(data-role="content")
