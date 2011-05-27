@@ -59,13 +59,13 @@ module MagentWeb
       doc = @errors_queue.find({:_id => params[:id]}).next_document
       channel.enqueue_error(doc)
 
-      redirect "/queues/#{params[:queue_id]}/failed"
+      redirect "#{queue_path(params[:queue_id])}/failed"
     end
 
     get "/queues/:queue_id/delete/:id" do
       @errors_queue = @database.collection(params[:queue_id]+".errors")
       @errors_queue.remove(:_id => params[:id])
-      redirect "/queues/#{params[:queue_id]}/failed"
+      redirect "#{queue_path(params[:queue_id])}/failed"
     end
 
     private

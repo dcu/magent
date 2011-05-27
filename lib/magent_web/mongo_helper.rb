@@ -55,7 +55,11 @@ module MagentWeb
       if v.nil? && quote
         "null"
       elsif v.kind_of?(Hash)
-        JSON.pretty_generate(v)
+        buffer = ""
+        v.each do |k,v|
+          buffer << "#{k.inspect}: #{v.inspect} <br />"
+        end
+        buffer
       elsif v.kind_of?(Array)
         v.map{|e| e.nil? ? "null" : e }.join("<br />")
       elsif v.kind_of?(Time)
@@ -79,6 +83,12 @@ module MagentWeb
 
     def channel_name_for(queue_id)
       queue_id.to_s.match("magent\.([^\.]+)")[1]
+    end
+
+    def queue_path(queue)
+      queue = queue.name if !queue.kind_of?(String)
+
+      "#{ENV["MAGENT_WEB_PATH"]}/queues/#{queue}"
     end
   end
 end

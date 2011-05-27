@@ -6,7 +6,7 @@
     %ul(data-role="listview" data-filter="true")
       -@queues.each do |queue|
         %li
-          %a(href="/queues/#{queue.name}")
+          %a(href="#{queue_path(queue)}")
             &=queue.name
           %span{:class=>"ui-li-count"}
             =0

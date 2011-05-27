@@ -19,18 +19,18 @@
         %div(data-role="navbar" data-iconpos="bottom")
           %ul
             %li
-              %a(href="/queues/#{@queue.name}/retry/#{document["_id"]}" data-icon="refresh")
+              %a(href="#{queue_path(@queue)}/retry/#{document["_id"]}" data-icon="refresh")
                 Retry
             %li
-              %a(href="/queues/#{@queue.name}/delete/#{document["_id"]}" data-icon="delete" data-theme="e")
+              %a(href="#{queue_path(@queue)}/delete/#{document["_id"]}" data-icon="delete" data-theme="e")
                 Delete
 
 
   %div(data-role="footer")
     -if skip > 0
-      %a(href="/queues/#{@queue.name}/failed?skip=#{params[:skip].to_i-25}")
+      %a(href="#{queue_path(@queue)}/failed?skip=#{params[:skip].to_i-25}")
         Previous
     -if count >= 25
-      %a(href="/queues/#{@queue.name}/failed?skip=#{params[:skip].to_i+25}")
+      %a(href="#{queue_path(@queue)}/failed?skip=#{params[:skip].to_i+25}")
         Next
 

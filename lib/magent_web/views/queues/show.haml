@@ -8,10 +8,10 @@
     %div{:"data-role" => "navbar"}
       %ul
         %li
-          %a(href="/queues/#{@queue.name}/failed" data-icon="alert")
+          %a(href="#{queue_path(@queue)}/failed" data-icon="alert")
             Failed
         %li
-          %a(href="/queues/#{@queue.name}/stats" data-icon="grid")
+          %a(href="#{queue_path(@queue)}/stats" data-icon="grid")
             Stats
 
 
@@ -29,8 +29,8 @@
 
   %div(data-role="footer")
     -if skip > 0
-      %a(href="/queues/#{@queue.name}?skip=#{params[:skip].to_i-25}")
+      %a(href="#{queue_path(@queue)}?skip=#{params[:skip].to_i-25}")
         Previous
     -if count >= 25
-      %a(href="/queues/#{@queue.name}?skip=#{params[:skip].to_i+25}")
+      %a(href="#{queue_path(@queue)}?skip=#{params[:skip].to_i+25}")
         Next
