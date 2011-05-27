@@ -2,6 +2,12 @@ module MagentWeb
   class App < Sinatra::Base
     include MagentWeb::MongoHelper
 
+    if MagentWeb.config["enable_auth"]
+      use Rack::Auth::Basic, "Restricted Area" do |username, password|
+        [username, password] == [MagentWeb.config["username"], MagentWeb.config["password"]]
+      end
+    end
+
     def initialize(*args)
       MagentWeb.connect
       super(*args)

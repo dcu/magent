@@ -12,17 +12,12 @@ require 'net/http'
 require 'uri'
 require 'cgi'
 
-require 'magent_web/mongo_helper'
-require 'magent_web/app'
-
 module MagentWeb
   def self.app
     MagentWeb::App
   end
 
   def self.connect
-    return if Magent.database
-
     ENV["MAGENT_ENV"] ||= ENV["RACK_ENV"] || ENV["RAILS_ENV"]
     if !ENV["MAGENT_ENV"]
       raise ArgumentError, "please define the env var MAGENT_ENV"
@@ -38,5 +33,23 @@ module MagentWeb
       raise ArgumentError, "/etc/magent.yml, ./config/magent.yml or ./magent.yml were not found"
     end
   end
+
+  def self.config_path
+    Dir.home+"/.magent_webrc"
+  end
+
+  def self.config
+    @config ||= YAML.load_file(self.config_path)
+  end
 end
 
+if !File.exist?(MagentWeb.config_path)
+  File.open(MagentWeb.config_path, "w") do |f|
+    f.write YAML.dump("username" => "admin", "password" => "admin", "enable_auth" => true)
+  end
+
+  $stdout.puts "Created #{MagentWeb.config_path} with username=admin password=admin"
+end
+
+require 'magent_web/mongo_helper'
+require 'magent_web/app'
