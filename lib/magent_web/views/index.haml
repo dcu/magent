@@ -1,14 +1,14 @@
 %div(data-role="page")
   %div(data-role="header")
     %h1
-      Foo
+      Queues
     %a(href="/status" class="ui-btn-right")
       Bar
   %div(data-role="content")
     %ul(data-role="listview" data-filter="true")
       -@queues.each do |queue|
         %li
-          %a(href="/queue/#{queue.name}")
+          %a(href="/queues/#{queue.name}")
             &=queue.name
           %span{:class=>"ui-li-count"}
             =0

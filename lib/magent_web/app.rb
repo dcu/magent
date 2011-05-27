@@ -11,6 +11,7 @@ module MagentWeb
     set :views, File.expand_path("../../../lib/magent_web/views", __FILE__)
 
     before do
+      @database = Magent.database
     end
 
     get "/" do
@@ -21,6 +22,13 @@ module MagentWeb
 
     get "/status" do
       haml :status
+    end
+
+    get "/queues/:id" do
+      @queue = @database.collection(params[:id])
+      @messages = document_list(@queue)
+
+      haml :"queues/show"
     end
 
     private

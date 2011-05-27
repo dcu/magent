@@ -1,0 +1,41 @@
+-count=0
+-skip = params[:skip].to_i
+%div(data-role="page")
+  %div(data-role="header")
+    %h1
+      Queue:
+      &=@title=@database.name+" / #{@queue.name}"
+    %div{:"data-role" => "navbar"}
+      %div{:"data-role" => "controlgroup", :"data-type" => "horizontal"}
+        %a(href="/queues/#{@queue.name}/failed")
+          Failed
+        %a(href="/queues/#{@queue.name}/stats")
+          Stats
+
+
+  %div(data-role="content")
+    -if skip == 0
+      %h1
+        Information
+      -normalize_stats(@queue.stats).each do |k,v|
+        %b
+          &="#{k}="
+        &=humanize v
+        %br
+    %h1
+      Pending Jobs
+    -@messages.each do |document|
+      -message = document["message"]
+      -count+=1
+      %div(data-role="collapsible" data-collapsed=true)
+        %h1
+          &= "[#{document["priority"]}] #{message.first}: #{humanize_messages(message.last)}"
+        =haml :"shared/values", :layout => false, :locals => {:hash => document}
+
+  %div(data-role="footer")
+    -if skip > 0
+      %a(href="/queues/#{@queue.name}?skip=#{params[:skip].to_i-25}")
+        Previous
+    -if count >= 25
+      %a(href="/queues/#{@queue.name}?skip=#{params[:skip].to_i+25}")
+        Next

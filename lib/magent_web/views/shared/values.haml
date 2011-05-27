@@ -1,0 +1,74 @@
+-hash.each do |key,value|
+  -k = humanize(key)
+  -v = humanize(value)
+
+  -if value.kind_of?(Hash) && value.size > 5
+    %div(data-role="collapsible" data-collapsed=true data-theme="b")
+      %h2
+        &=k
+      = haml :"shared/values", :layout => false, :locals => {:hash => value}
+  -elsif value.kind_of?(Array) && value.size > 5
+    %div(data-role="collapsible" data-collapsed=true data-theme="b")
+      %h2
+        &=k
+      -tmp = []
+      -value.each_with_index do |element, index|
+        -if element.kind_of?(Hash)
+          %div(data-role="collapsible" data-collapsed=true data-theme="e")
+            %h2
+              &=index
+            = haml :"shared/values", :layout => false, :locals => {:hash => element}
+        -else
+          -tmp << element
+      - if !tmp.empty?
+        =humanize(tmp)
+        %br
+
+  -else
+    %b
+      -if key == "_type"
+        %span.type_key
+          &=k
+      -elsif key == "_id"
+        %span.pk_key
+          &=k
+      -elsif key =~ /_id$/
+        %span.fk_key
+          &=k
+      -elsif key =~ /_at$/
+        %span.date_key
+          &=k
+      -elsif ["name", "title"].include?(key)
+        %span.name_key
+          &=k
+      -elsif key =~ /^_/
+        %span.private_key
+          &=k
+      -else
+        %span.normal_key
+        &=k
+      \=
+
+    -if key == "_type"
+      %span.type_value
+        &=v
+    -elsif key == "_id"
+      %span.pk_value
+        &=v
+    -elsif key =~ /_id$/
+      %span.fk_value
+        &=v
+    -elsif key =~ /_at$/
+      %span.date_value
+        &=v
+    -elsif ["name", "title"].include?(key)
+      %span.name_value
+        &=v
+    -elsif key =~ /^_/
+      %span.private_value
+        &=v
+    -else
+      %span.normal_value
+      &=v
+    %br<
+
