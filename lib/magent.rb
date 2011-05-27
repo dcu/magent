@@ -62,7 +62,7 @@ module Magent
   end
 
   def self.connect(environment, options={})
-    raise 'Set config before connecting. Magent.config = {...}' if config.blank?
+    raise 'Set config before connecting. Magent.config = {...}' if config.nil? || config.empty?
 
     env = config_for_environment(environment)
     Magent.connection = Mongo::Connection.new(env['host'], env['port'], options)
@@ -97,7 +97,7 @@ module Magent
   def self.config_for_environment(environment)
     env = environment ? config[environment] : config
 
-    return env if env['uri'].blank?
+    return env if env['uri'].nil? || env['uri'].blank?
 
     uri = URI.parse(env['uri'])
     raise InvalidScheme.new('must be mongodb') unless uri.scheme == 'mongodb'

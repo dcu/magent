@@ -1,0 +1,15 @@
+!!! 5
+%html
+  %head
+    %title
+      =@title||"Magent Web"
+    %link(rel="stylesheet" href="/stylesheets/jquery.mobile-1.0b1pre.min.css")
+    %link(rel="stylesheet" href="/stylesheets/highlight.css")
+
+    %script(src="http://code.jquery.com/jquery-1.5.2.min.js")
+    %script(src="/javascripts/jquery.mobile-1.0b1pre.min.js")
+
+    %script(src="/javascripts/application.js")
+  %body
+    = yield
+

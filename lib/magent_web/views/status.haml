@@ -1,0 +1,72 @@
+-status = server_status
+-background_flushing = status.delete("backgroundFlushing")
+-global_lock = status.delete("globalLock")
+-network = status.delete("network")
+-mem = status.delete("mem")
+-ops = status.delete("opcounters")
+
+%div.status_page(data-role="page")
+  %div(data-role="header")
+    %h1
+      Server Status
+  %div(data-role="content")
+    %div(data-role="collapsible" data-collapsed=true)
+      %h1
+        Server Status
+      -normalize_stats(status).each do |k,v|
+        %b
+          &="#{k}="
+        &=humanize v
+        %br
+
+    %div(data-role="collapsible" data-collapsed=true)
+      %h1
+        Operations Per Second
+      #ops
+
+    %div(data-role="collapsible" data-collapsed=true)
+      %h1
+        Background Flushing
+      -normalize_stats(background_flushing).each do |k,v|
+        %b
+          &="#{k}="
+        &=humanize v
+        %br
+
+    %div(data-role="collapsible" data-collapsed=true)
+      %h1
+        Global Lock
+      -normalize_stats(global_lock).each do |k,v|
+        %b
+          &="#{k}="
+        &=humanize v
+        %br
+    %div(data-role="collapsible" data-collapsed=true)
+      %h1
+        Network
+      -normalize_stats(network).each do |k,v|
+        %b
+          &="#{k}="
+        &=humanize v
+        %br
+    %div(data-role="collapsible" data-collapsed=true)
+      %h1
+        Memory
+      -normalize_stats(mem).each do |k,v|
+        %b
+          &="#{k}="
+        &=humanize v
+        %br
+
+    %div(data-role="collapsible" data-collapsed=true)
+      %h1
+        Operations
+      -normalize_stats(ops).each do |k,v|
+        %b
+          &="#{k}="
+        &=humanize v
+        %br
+
+
+  %div(data-role="footer")
+
