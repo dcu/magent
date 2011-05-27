@@ -2,6 +2,11 @@ module MagentWeb
   class App < Sinatra::Base
     include MagentWeb::MongoHelper
 
+    def initialize(*args)
+      MagentWeb.connect
+      super(*args)
+    end
+
     helpers do
       include Rack::Utils
       alias_method :h, :escape_html

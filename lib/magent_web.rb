@@ -17,12 +17,12 @@ require 'magent_web/app'
 
 module MagentWeb
   def self.app
-    MagentWeb.connect
-
     MagentWeb::App
   end
 
   def self.connect
+    return if Magent.database
+
     ENV["MAGENT_ENV"] ||= ENV["RACK_ENV"] || ENV["RAILS_ENV"]
     if !ENV["MAGENT_ENV"]
       raise ArgumentError, "please define the env var MAGENT_ENV"
