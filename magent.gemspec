@@ -5,7 +5,7 @@
 
 Gem::Specification.new do |s|
   s.name = %q{magent}
-  s.version = "0.6.0"
+  s.version = "0.6.1"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["David A. Cuadrado"]
@@ -47,6 +47,7 @@ Gem::Specification.new do |s|
     "lib/magent/processor.rb",
     "lib/magent/push.rb",
     "lib/magent/railtie.rb",
+    "lib/magent/stats.rb",
     "lib/magent/utils.rb",
     "lib/magent/web_socket_channel.rb",
     "lib/magent/web_socket_server.rb",
