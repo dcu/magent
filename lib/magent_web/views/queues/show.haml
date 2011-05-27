@@ -4,7 +4,7 @@
   %div(data-role="header")
     %h1
       Queue:
-      &=@title=@database.name+" / #{@queue.name}"
+      &=@title=@database.name+" / #{channel_name_for(@queue.name)}"
     %div{:"data-role" => "navbar"}
       %ul
         %li
@@ -26,6 +26,7 @@
         %br
     %h1
       Pending Jobs
+      ==(#{@messages.count})
     -@messages.each do |document|
       -message = document["message"]
       -count+=1

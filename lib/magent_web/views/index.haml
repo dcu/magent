@@ -1,9 +1,7 @@
 %div(data-role="page")
   %div(data-role="header")
     %h1
-      Queues
-    %a(href="/status" class="ui-btn-right")
-      Bar
+      = @title = "All Magent Queues"
   %div(data-role="content")
     %ul(data-role="listview" data-filter="true")
       -@queues.each do |queue|

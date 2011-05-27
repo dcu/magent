@@ -8,6 +8,7 @@
   %div(data-role="content")
     %h1
       Failed Jobs
+      ==(#{@errors.count})
     -@errors.each do |document|
       -message = document["message"]
       -count+=1
