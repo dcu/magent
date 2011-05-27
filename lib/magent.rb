@@ -6,6 +6,7 @@ require 'mongo'
 require 'set'
 require 'uuidtools'
 
+require 'magent/stats'
 require 'magent/failure'
 
 require 'magent/utils'

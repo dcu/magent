@@ -91,7 +91,7 @@ class Controller
     if @options[:daemonize] && @options[:piddir]
       run_as_daemon
     else
-      Magent::Processor.new(self.channel).run!
+      Magent::Processor.new(self.channel, @identity).run!
     end
   end
 

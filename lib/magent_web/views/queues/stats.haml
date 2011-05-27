@@ -3,4 +3,14 @@
     %h1
       =@title ="Stats"
   %div(data-role="content")
+    %h3
+      Database Information
+    -normalize_stats(@queue.stats).each do |k,v|
+      %b
+        &="#{k}="
+      &=humanize v
+      %br
+    %h3
+      Stats
+
   %div(data-role="footer")

@@ -1,8 +1,11 @@
 module Magent
   class Processor
-    def initialize(channel)
+    def initialize(channel, identity = "#{channel.name}-#{Socket.gethostname.split('.')[0]}")
       @channel = channel
       @shutdown = false
+      @identity = identity
+
+      @channel.on_start(identity)
 
 #       @actor.class.actions.each do |action|
 #         if !@actor.respond_to?(action)
@@ -23,8 +26,12 @@ module Magent
 
         message = @channel.dequeue
         begin
+          t = Time.now
           if message && @channel.process!(message)
             puts "Processed #{message.inspect}"
+
+            @channel.on_job_processed(@channel.current_job, Time.now - t, @identity)
+
             delay = 0
             processed_messages += 1
             if processed_messages > 20
@@ -37,6 +44,7 @@ module Magent
         rescue SystemExit
         rescue Exception => e
           $stderr.puts "Error processing #{message.inspect} => #{e.message}"
+          @channel.on_job_failed(@identity)
           @channel.failed(:error => e.message, :message => message, :backtrace => e.backtrace, :date => Time.now.utc)
         ensure
         end
@@ -47,6 +55,8 @@ module Magent
 
     def shutdown!
       @shutdown = true
+      @channel.on_quit
+
       @channel.on_shutdown if @channel.respond_to?(:on_shutdown)
       $stderr.puts "Shutting down..."
     end

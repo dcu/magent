@@ -16,14 +16,6 @@
 
 
   %div(data-role="content")
-    -if skip == 0
-      %h1
-        Information
-      -normalize_stats(@queue.stats).each do |k,v|
-        %b
-          &="#{k}="
-        &=humanize v
-        %br
     %h1
       Pending Jobs
       ==(#{@messages.count})

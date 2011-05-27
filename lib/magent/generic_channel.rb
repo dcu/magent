@@ -1,8 +1,10 @@
 module Magent
   class GenericChannel
     include Magent::Failure
+    include Magent::Stats
 
     attr_reader :name
+    attr_reader :current_job
 
     def initialize(name)
       @name = "magent.#{name}"
@@ -21,8 +23,8 @@ module Magent
     end
 
     def dequeue
-      if m = self.next_message
-        m["message"]
+      if @current_job = self.next_message
+        @current_job["message"]
       end
     end
 
