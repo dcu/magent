@@ -11,6 +11,7 @@
       &=humanize v
       %br
     %h3
-      Stats
+      General Stats
+    =haml :"shared/values", :layout => false, :locals => {:hash => normalize_stats(@stats)}
 
   %div(data-role="footer")

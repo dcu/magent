@@ -2,12 +2,12 @@
   -k = humanize(key)
   -v = humanize(value)
 
-  -if value.kind_of?(Hash) && value.size > 5
+  -if value.kind_of?(Hash)
     %div(data-role="collapsible" data-collapsed=true data-theme="b")
       %h2
         &=k
       = haml :"shared/values", :layout => false, :locals => {:hash => value}
-  -elsif value.kind_of?(Array) && value.size > 5
+  -elsif value.kind_of?(Array)
     %div(data-role="collapsible" data-collapsed=true data-theme="b")
       %h2
         &=k

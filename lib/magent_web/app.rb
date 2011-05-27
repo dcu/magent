@@ -41,6 +41,11 @@ module MagentWeb
 
     get "/queues/:id/stats" do
       @queue = @database.collection(params[:id])
+      @channel_name = channel_name_for(params[:id])
+      channel = Magent::GenericChannel.new(@channel_name)
+
+      @stats_collection = channel.stats_collection
+      @stats = channel.stats
 
       haml :"queues/stats"
     end
@@ -49,7 +54,7 @@ module MagentWeb
       @errors_queue = @database.collection(params[:queue_id]+".errors")
       @channel_name = channel_name_for(params[:queue_id])
 
-      channel = Magent::AsyncChannel.new(@channel_name)
+      channel = Magent::GenericChannel.new(@channel_name)
 
       doc = @errors_queue.find({:_id => params[:id]}).next_document
       channel.enqueue_error(doc)

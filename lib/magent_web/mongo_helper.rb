@@ -3,7 +3,7 @@ module MagentWeb
     def queues
       q = []
       Magent.database.collections.each do |collection|
-        if collection.name =~ /^magent\./ && collection.name !~ /errors$/
+        if collection.name =~ /^magent\./ && collection.name !~ /(errors|stats)$/
           q << collection
         end
       end
@@ -51,13 +51,13 @@ module MagentWeb
       Magent.database.command(:serverStatus => 1)
     end
 
-    def humanize(v, quote = true)
+    def humanize(v, quote = false)
       if v.nil? && quote
         "null"
       elsif v.kind_of?(Hash)
         JSON.pretty_generate(v)
       elsif v.kind_of?(Array)
-        JSON.pretty_generate(v)
+        v.map{|e| e.nil? ? "null" : e }.join("<br />")
       elsif v.kind_of?(Time)
         v.strftime("%d %B %Y %H:%M:%S").inspect
       elsif quote
