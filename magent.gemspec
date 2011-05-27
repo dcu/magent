@@ -5,7 +5,7 @@
 
 Gem::Specification.new do |s|
   s.name = %q{magent}
-  s.version = "0.6.1"
+  s.version = "0.6.2"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["David A. Cuadrado"]
@@ -63,8 +63,8 @@ Gem::Specification.new do |s|
     "lib/magent_web/views/status.haml",
     "lib/tasks/magent.rake",
     "magent.gemspec",
-    "public/javascripts/application.js",
     "public/javascripts/jquery.mobile-1.0b1pre.min.js",
+    "public/javascripts/magent_web.js",
     "public/stylesheets/highlight.css",
     "public/stylesheets/images/ajax-loader.png",
     "public/stylesheets/images/icon-search-black.png",
