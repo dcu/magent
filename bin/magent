@@ -98,9 +98,7 @@ class Controller
   def stop
     begin
       pid = File.read(pid_file).to_i
-      Process.kill("TERM", pid)
-      Process.kill(0, pid)
-      Process.wait
+      Process.kill("QUIT", pid)
     rescue Errno::ECHILD, Errno::ESRCH => e
       $stdout.puts "Process #{pid} has stopped"
     rescue Errno::ENOENT => e
