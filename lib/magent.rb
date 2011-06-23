@@ -66,7 +66,13 @@ module Magent
     raise 'Set config before connecting. Magent.config = {...}' if config.nil? || config.empty?
 
     env = config_for_environment(environment)
-    Magent.connection = Mongo::Connection.new(env['host'], env['port'], options)
+    Magent.connection = if env['host'].is_a?(Array)
+      # ["127.0.0.1 27017", "0.0.0.0 27017"] => [["127.0.0.1", "27017"], ["0.0.0.0", "27017"]]
+      hosts = env['host'].inject([]){|memo, k| memo << k.split}
+      Mongo::ReplSetConnection.new(*hosts, options)
+    else
+      Mongo::Connection.new(env['host'], env['port'], options)
+    end
     Magent.database = env['database']
     Magent.database.authenticate(env['username'], env['password']) if env['username'] && env['password']
   end
