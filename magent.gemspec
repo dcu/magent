@@ -87,39 +87,30 @@ Gem::Specification.new do |s|
     s.specification_version = 3
 
     if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0') then
-      s.add_runtime_dependency(%q<mongo>, ["~> 1.0"])
+      s.add_runtime_dependency(%q<mongo>, ["~> 1.3"])
       s.add_runtime_dependency(%q<uuidtools>, [">= 0"])
       s.add_runtime_dependency(%q<em-websocket>, [">= 0"])
       s.add_runtime_dependency(%q<sinatra>, ["~> 1.2.6"])
       s.add_runtime_dependency(%q<haml>, ["~> 3.1.1"])
       s.add_runtime_dependency(%q<launchy>, ["~> 0.4.0"])
       s.add_development_dependency(%q<thoughtbot-shoulda>, [">= 0"])
-      s.add_runtime_dependency(%q<mongo>, [">= 0"])
-      s.add_runtime_dependency(%q<em-websocket>, [">= 0"])
-      s.add_runtime_dependency(%q<uuidtools>, [">= 0"])
     else
-      s.add_dependency(%q<mongo>, ["~> 1.0"])
+      s.add_dependency(%q<mongo>, ["~> 1.3"])
       s.add_dependency(%q<uuidtools>, [">= 0"])
       s.add_dependency(%q<em-websocket>, [">= 0"])
       s.add_dependency(%q<sinatra>, ["~> 1.2.6"])
       s.add_dependency(%q<haml>, ["~> 3.1.1"])
       s.add_dependency(%q<launchy>, ["~> 0.4.0"])
       s.add_dependency(%q<thoughtbot-shoulda>, [">= 0"])
-      s.add_dependency(%q<mongo>, [">= 0"])
-      s.add_dependency(%q<em-websocket>, [">= 0"])
-      s.add_dependency(%q<uuidtools>, [">= 0"])
     end
   else
-    s.add_dependency(%q<mongo>, ["~> 1.0"])
+    s.add_dependency(%q<mongo>, ["~> 1.3"])
     s.add_dependency(%q<uuidtools>, [">= 0"])
     s.add_dependency(%q<em-websocket>, [">= 0"])
     s.add_dependency(%q<sinatra>, ["~> 1.2.6"])
     s.add_dependency(%q<haml>, ["~> 3.1.1"])
     s.add_dependency(%q<launchy>, ["~> 0.4.0"])
     s.add_dependency(%q<thoughtbot-shoulda>, [">= 0"])
-    s.add_dependency(%q<mongo>, [">= 0"])
-    s.add_dependency(%q<em-websocket>, [">= 0"])
-    s.add_dependency(%q<uuidtools>, [">= 0"])
   end
 end
 
