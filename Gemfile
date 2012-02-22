@@ -1,10 +1,11 @@
 source 'http://rubygems.org'
 
-gem 'mongo', '~> 1.0'
+gem 'mongo'
 gem 'uuidtools'
 
 gem 'em-websocket'
 
-gem 'sinatra', '~> 1.2.6'
-gem 'haml', '~> 3.1.1'
-gem 'launchy', '~> 0.4.0'
+gem 'sinatra'
+gem 'haml'
+gem 'launchy'
+
