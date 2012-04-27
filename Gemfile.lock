@@ -2,16 +2,16 @@ GEM
   remote: http://rubygems.org/
   specs:
     addressable (2.2.7)
-    bson (1.5.2)
+    bson (1.6.2)
     em-websocket (0.3.6)
       addressable (>= 2.1.1)
       eventmachine (>= 0.12.9)
     eventmachine (0.12.10)
     haml (3.1.4)
-    launchy (2.0.5)
+    launchy (2.1.0)
       addressable (~> 2.2.6)
-    mongo (1.5.2)
-      bson (= 1.5.2)
+    mongo (1.6.2)
+      bson (~> 1.6.2)
     rack (1.4.1)
     rack-protection (1.2.0)
       rack
