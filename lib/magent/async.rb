@@ -30,7 +30,7 @@ module Magent
         @queue = queue
         @method_chain = []
         @target = target
-        @test = test
+        @test = test || Magent.sync_mode
 
         @channel = Magent::AsyncChannel.new(@queue)
       end

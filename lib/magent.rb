@@ -62,6 +62,14 @@ module Magent
     @@config = config
   end
 
+  def self.sync_mode
+    @@sync_mode ||= false
+  end
+
+  def self.sync_mode=(m)
+    @@sync_mode = m
+  end
+
   def self.connect(environment, options={})
     raise 'Set config before connecting. Magent.config = {...}' if config.nil? || config.empty?
 
