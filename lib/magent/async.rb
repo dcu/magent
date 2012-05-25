@@ -9,9 +9,9 @@
 #     end
 #
 #     async call:
-#         Processor.find(id).async(:my_queue).process.commit!(priority)
+#         Processor.find(id).async(:my_queue, priority).process
 #     chained methods:
-#         Processor.async(:my_queue, true).find(1).process.commit!(priority)
+#         Processor.async(:my_queue, priority).find(1).process
 #
 
 module Magent
@@ -28,36 +28,32 @@ module Magent
 
       def initialize(queue, target, priority = 3)
         @queue = queue
-        @method_chain = []
         @target = target
         @priority = priority
 
         @channel = Magent::AsyncChannel.new(@queue)
       end
 
-      def commit!
+      def commit!(method_name, args)
         if Magent.sync_mode
-          target = @target
-          @method_chain.each do |c|
-            target = target.send(c[0], *c[1])
-          end
-
-          target
+          @target.send(method_name, *args)
         else
-          @channel.push(@target, @method_chain, @priority)
+          @channel.push(@target, [method_name, args], @priority)
         end
+
+        @target
       end
 
       def method_missing(m, *args, &blk)
         raise ArgumentError, "ruby blocks are not supported yet" if !blk.nil?
-        @method_chain << [m, args]
-        commit!
+
+        commit!(m, args)
         self
       end
     end
 
     module Methods
-      # @question.async(:judge).on_view_question.commit!(1)
+      # @question.async(:judge).on_view_question
       def async(queue = :default, priority = 3)
         Magent::Async::Proxy.new(queue, self, priority)
       end

@@ -6,15 +6,9 @@ module Magent
       @identity = identity
 
       @channel.on_start(identity)
-
-#       @actor.class.actions.each do |action|
-#         if !@actor.respond_to?(action)
-#           raise ArgumentError, "action '#{action}' is not defined"
-#         end
-#       end
     end
 
-    def run!
+    def run!(service = true)
       processed_messages = 0
       delay = 0
 
@@ -49,13 +43,15 @@ module Magent
         ensure
         end
 
+        break if !service
+
         sleep (delay*100.0).to_i/100.0
       end
     end
 
     def shutdown!
       @shutdown = true
-      @channel.on_quit
+      @channel.on_quit(@identity)
 
       @channel.on_shutdown if @channel.respond_to?(:on_shutdown)
       $stderr.puts "Shutting down..."
