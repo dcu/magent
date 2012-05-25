@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = "magent"
-  s.version = "0.6.2"
+  s.version = "0.7.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["David A. Cuadrado"]
-  s.date = "2012-02-22"
+  s.date = "2012-05-25"
   s.description = "Simple job queue system based on mongodb"
   s.email = "krawek@gmail.com"
   s.executables = ["magent", "magent-web"]
@@ -31,26 +31,16 @@ Gem::Specification.new do |s|
     "bin/magent",
     "bin/magent-web",
     "config.ru",
-    "examples/comm/run.rb",
-    "examples/comm/worker.rb",
-    "examples/error/error.rb",
-    "examples/mongomapper/async.rb",
-    "examples/simple/bot.rb",
-    "examples/stats/stats.rb",
+    "examples/test_mode.rb",
     "lib/magent.rb",
-    "lib/magent/actor.rb",
-    "lib/magent/actor_channel.rb",
     "lib/magent/async.rb",
     "lib/magent/async_channel.rb",
     "lib/magent/failure.rb",
     "lib/magent/generic_channel.rb",
     "lib/magent/processor.rb",
-    "lib/magent/push.rb",
     "lib/magent/railtie.rb",
     "lib/magent/stats.rb",
     "lib/magent/utils.rb",
-    "lib/magent/web_socket_channel.rb",
-    "lib/magent/web_socket_server.rb",
     "lib/magent_web.rb",
     "lib/magent_web/app.rb",
     "lib/magent_web/mongo_helper.rb",
@@ -79,7 +69,7 @@ Gem::Specification.new do |s|
   ]
   s.homepage = "http://github.com/dcu/magent"
   s.require_paths = ["lib"]
-  s.rubygems_version = "1.8.10"
+  s.rubygems_version = "1.8.11"
   s.summary = "Simple job queue system based on mongodb"
 
   if s.respond_to? :specification_version then
