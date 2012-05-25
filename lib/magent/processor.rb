@@ -37,9 +37,13 @@ module Magent
           end
         rescue SystemExit
         rescue Exception => e
-          $stderr.puts "Error processing #{message.inspect} => #{e.message}"
+          $stderr.puts "Error processing #{message.inspect} => #{e.message}.\n#{e.backtrace.join("\n\t")}"
           @channel.on_job_failed(@identity)
-          @channel.failed(:error => e.message, :message => message, :backtrace => e.backtrace, :date => Time.now.utc)
+
+          if !@channel.retry_current_job
+            $stderr.puts "Cannot retry job because it has been retried #{@channel.current_job['retries']} times"
+            @channel.failed(:error => e.message, :message => message, :backtrace => e.backtrace, :date => Time.now.utc)
+          end
         ensure
         end
 

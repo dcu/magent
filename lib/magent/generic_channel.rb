@@ -11,7 +11,7 @@ module Magent
     end
 
     def enqueue(message, priority = 3)
-      collection.save({:_id => generate_uid, :message => message, :priority => priority, :created_at => Time.now.to_i})
+      collection.save({:_id => generate_uid, :message => message, :priority => priority, :created_at => Time.now.to_i, :retries => 0})
     end
 
     def message_count
@@ -35,6 +35,19 @@ module Magent
 
     def collection
       @collection ||= Magent.database.collection(@name)
+    end
+
+    def retry_current_job
+      return false if !@current_job
+
+      @current_job['retries'] ||= 0
+      if @current_job['retries'] < 20
+        @current_job['retries'] += 1
+        collection.save(@current_job)
+        true
+      else
+        false
+      end
     end
 
     protected
