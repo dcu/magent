@@ -4,7 +4,7 @@ require 'rails'
 module Magent
   class Railtie < Rails::Railtie
     rake_tasks do
-      load "tasks/magent.rake"
+      load "magent/tasks.rb"
     end
   end
 end

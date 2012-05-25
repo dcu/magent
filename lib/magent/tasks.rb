@@ -1,18 +1,18 @@
 namespace :magent do
   desc "start magent queue"
   task :start do
-    if env = Rake::Task["environment"]
-      env.invoke
+    if Rake::Task.task_defined?("environment")
+      Rake::Task["environment"].invoke
     end
     queue = ENV['QUEUE'] || 'default'
     puts "Starting magent working on #{queue}. #{Magent.config.inspect}"
-    Magent::Processor.new(Magent::AsyncChannel.new(queue)).run!
+    Magent::Processor.new(Magent::AsyncChannel.new(queue)).run!(false)
   end
 
   desc "display all errors"
   task :errors do
-    if env = Rake::Task["environment"]
-      env.invoke
+    if Rake::Task.task_defined?("environment")
+      Rake::Task["environment"].invoke
     end
 
     channel = Magent::AsyncChannel.new(ENV['QUEUE'] || 'default')
@@ -20,14 +20,17 @@ namespace :magent do
     page = 1
 
     channel.error_collection.find({}).each do |error|
-      puts error.to_json
+      puts ">>> [#{error['date'].strftime("%F %X")}] ERROR: #{error['error']} on queue #{error['channel']}"
+      puts "message=#{error['message'].inspect}"
+      puts "backtrace=#{error['backtrace'].join("\n\t")}"
+      puts "\n"
     end
   end
 
   desc "remove all errors"
   task :remove_errors do
-    if env = Rake::Task["environment"]
-      env.invoke
+    if Rake::Task.task_defined?("environment")
+      Rake::Task["environment"].invoke
     end
 
     channel = Magent::AsyncChannel.new(ENV['QUEUE'] || 'default')
@@ -40,8 +43,8 @@ namespace :magent do
 
   desc "retry all errors"
   task :retry do
-    if env = Rake::Task["environment"]
-      env.invoke
+    if Rake::Task.task_defined?("environment")
+      Rake::Task["environment"].invoke
     end
 
     channel = Magent::AsyncChannel.new(ENV['QUEUE'] || 'default')

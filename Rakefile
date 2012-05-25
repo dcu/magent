@@ -1,6 +1,9 @@
 require 'rubygems'
 require 'rake'
 
+$:.unshift File.expand_path("../lib", __FILE__)
+require 'magent'
+
 begin
   require 'jeweler'
   Jeweler::Tasks.new do |gem|

@@ -27,8 +27,12 @@ module Magent
     end
 
     def retry_error(error)
-      process!(error["message"])
-      remove_error(error["_id"])
+      begin
+        process!(error["message"])
+        remove_error(error["_id"])
+      rescue => e
+        $stderr.puts "Failed to retry error #{error['_id']}: #{e.message}"
+      end
     end
 
     def enqueue_error(error)

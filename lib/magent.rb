@@ -17,7 +17,11 @@ require 'magent/processor'
 require 'magent/async'
 require 'magent/async_channel'
 
-require 'magent/railtie' if defined?(Rails) && Rails.version >= "3.0.0"
+if defined?(Rails) && Rails.version >= "3.0.0"
+  require 'magent/railtie'
+elsif defined?(Rake)
+  require 'magent/tasks'
+end
 
 module Magent
   @@database_name = "magent"
