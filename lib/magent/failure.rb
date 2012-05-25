@@ -1,7 +1,12 @@
 module Magent
   module Failure
     def failed(info)
-      error_collection.save(info.merge({:_id => generate_uid, :channel => @name, :channel_class => self.class.to_s, :created_at => Time.now.utc}))
+      error_collection.save(info.merge({
+        :_id => generate_uid,
+        :channel => @name,
+        :channel_class => self.class.to_s,
+        :created_at => Time.now.utc
+      }))
     end
 
     def error_count

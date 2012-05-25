@@ -26,39 +26,40 @@ module Magent
     class Proxy
       instance_methods.each { |m| undef_method m unless m =~ /(^__|^nil\?$|^send$|proxy_|^object_id$)/ }
 
-      def initialize(queue, target, test = false)
+      def initialize(queue, target, priority = 3)
         @queue = queue
         @method_chain = []
         @target = target
-        @test = test || Magent.sync_mode
+        @priority = priority
 
         @channel = Magent::AsyncChannel.new(@queue)
       end
 
-      def commit!(priority = 3)
-        @channel.push(@target, @method_chain, priority)
-
-        if @test
+      def commit!
+        if Magent.sync_mode
           target = @target
           @method_chain.each do |c|
             target = target.send(c[0], *c[1])
           end
 
           target
+        else
+          @channel.push(@target, @method_chain, @priority)
         end
       end
 
       def method_missing(m, *args, &blk)
         raise ArgumentError, "ruby blocks are not supported yet" if !blk.nil?
         @method_chain << [m, args]
+        commit!
         self
       end
     end
 
     module Methods
       # @question.async(:judge).on_view_question.commit!(1)
-      def async(queue = :default, test = false)
-        Magent::Async::Proxy.new(queue, self, test)
+      def async(queue = :default, priority = 3)
+        Magent::Async::Proxy.new(queue, self, priority)
       end
     end
   end # Async
