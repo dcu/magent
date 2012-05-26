@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["David A. Cuadrado"]
-  s.date = "2012-05-25"
+  s.date = "2012-05-26"
   s.description = "Simple job queue system based on mongodb"
   s.email = "krawek@gmail.com"
   s.executables = ["magent", "magent-web"]
@@ -31,6 +31,8 @@ Gem::Specification.new do |s|
     "bin/magent",
     "bin/magent-web",
     "config.ru",
+    "examples/findable.rb",
+    "examples/retries.rb",
     "examples/test_mode.rb",
     "lib/magent.rb",
     "lib/magent/async.rb",
@@ -40,6 +42,7 @@ Gem::Specification.new do |s|
     "lib/magent/processor.rb",
     "lib/magent/railtie.rb",
     "lib/magent/stats.rb",
+    "lib/magent/tasks.rb",
     "lib/magent/utils.rb",
     "lib/magent_web.rb",
     "lib/magent_web/app.rb",
@@ -51,7 +54,6 @@ Gem::Specification.new do |s|
     "lib/magent_web/views/queues/stats.haml",
     "lib/magent_web/views/shared/values.haml",
     "lib/magent_web/views/status.haml",
-    "lib/tasks/magent.rake",
     "magent.gemspec",
     "public/javascripts/jquery.mobile-1.0b1pre.min.js",
     "public/javascripts/magent_web.js",
