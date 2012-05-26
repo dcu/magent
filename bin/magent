@@ -4,6 +4,8 @@ if File.exists?("magent.init.rb")
   require './magent.init'
 elsif File.exist?("config/environments") && File.exist?("app/models") # rails
   require Dir.getwd + '/config/environment'
+elsif File.exist?("config/apps.rb") && File.exist?("config/boot.rb") # padrino
+  require Dir.getwd + "/config/boot"
 end
 
 $:.unshift File.dirname(__FILE__)+"/../lib/"
