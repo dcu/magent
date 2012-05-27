@@ -40,7 +40,22 @@ module Magent
     end
 
     def on_start(updated_by)
-      puts ">>> Current Stats: #{stats.inspect}"
+      puts ">>> Starting magent with stats:"
+      stats.each do |k, v|
+        title = k.split("_"); title.delete("")
+        title = title.map{|w| w.strip.upcase}.join(" ")+":"
+
+        value = v.inspect
+        if v.kind_of?(Hash)
+          value = ""
+          v.each do |kk, vv|
+            value << "\n"
+          end
+        end
+
+        puts "#{title.ljust(20, " ")} #{v}"
+      end
+
       stats_collection.update({:_id => @name}, {:$set => {:"workers.#{updated_by}.last_update_at" => Time.now.utc},
                                                 :$inc => {:"workers.#{updated_by}.total_restarts" => 1} }, {:safe => true, :multi => true})
     end

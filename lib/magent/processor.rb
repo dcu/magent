@@ -22,8 +22,6 @@ module Magent
         begin
           t = Time.now
           if message && @channel.process!(message)
-            puts "Processed #{message.inspect}"
-
             @channel.on_job_processed(@channel.current_job, Time.now - t, @identity)
 
             delay = 0

@@ -13,6 +13,8 @@ module Magent
       target = Magent::Encoder.decode_arg(target)
       args = Magent::Encoder.decode_args(method[1])
 
+      puts "### Processing #{target.inspect}.#{method[0]}(#{args.map{|e| e.inspect }.join(",") })"
+
       target.send(method[0], *args)
 
       true
