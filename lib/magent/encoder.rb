@@ -10,7 +10,12 @@ module Magent
         end
         ret
       elsif arg.class.respond_to?(:find) && arg.respond_to?(:id)
-        ":F:#{arg.class}##{self.encode_arg(arg.id)}"
+        id = arg.id
+        if id.nil? || (arg.respond_to?(:new_record?) && arg.new_record?)
+          id = :new
+        end
+
+        ":F:#{arg.class}##{self.encode_arg(id)}"
       elsif arg.kind_of?(Class)
         ":C:#{arg}"
       elsif arg.kind_of?(Symbol)
@@ -33,7 +38,12 @@ module Magent
         case arg[0,3]
         when ':F:'
           klass, id = arg[3..-1].split("#",2)
-          Object.module_eval(klass).find(self.decode_arg(id))
+          id = self.decode_arg(id)
+          if id == :new
+            Object.module_eval(klass).new
+          else
+            Object.module_eval(klass).find(id)
+          end
         when ':C:'
           Object.module_eval(arg[3..-1])
         when ':S:'
