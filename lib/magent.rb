@@ -9,6 +9,8 @@ require 'uuidtools'
 require 'magent/stats'
 require 'magent/failure'
 
+require 'magent/encoder'
+
 require 'magent/utils'
 require 'magent/generic_channel'
 

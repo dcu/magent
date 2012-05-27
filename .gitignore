@@ -5,3 +5,5 @@ lib/discm
 log/*
 public/stylesheets/**/*.css
 .bundle
+*.tmproj
+pkg

@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["David A. Cuadrado"]
-  s.date = "2012-05-26"
+  s.date = "2012-05-27"
   s.description = "Simple job queue system based on mongodb"
   s.email = "krawek@gmail.com"
   s.executables = ["magent", "magent-web"]
@@ -19,6 +19,7 @@ Gem::Specification.new do |s|
   ]
   s.files = [
     ".document",
+    ".rspec",
     "Gemfile",
     "Gemfile.lock",
     "History.txt",
@@ -37,6 +38,7 @@ Gem::Specification.new do |s|
     "lib/magent.rb",
     "lib/magent/async.rb",
     "lib/magent/async_channel.rb",
+    "lib/magent/encoder.rb",
     "lib/magent/failure.rb",
     "lib/magent/generic_channel.rb",
     "lib/magent/processor.rb",
@@ -66,10 +68,15 @@ Gem::Specification.new do |s|
     "public/stylesheets/images/icons-36-white.png",
     "public/stylesheets/jquery.mobile-1.0b1pre.min.css",
     "script/console",
-    "test/test_helper.rb",
-    "test/test_magent.rb"
+    "spec/magent_spec.rb",
+    "spec/spec_helper.rb",
+    "spec/support/agent.rb",
+    "spec/support/encodable/custom.rb",
+    "spec/support/encodable/custom_array.rb",
+    "spec/support/encodable/model.rb"
   ]
   s.homepage = "http://github.com/dcu/magent"
+  s.licenses = ["MIT"]
   s.require_paths = ["lib"]
   s.rubygems_version = "1.8.11"
   s.summary = "Simple job queue system based on mongodb"
@@ -79,38 +86,47 @@ Gem::Specification.new do |s|
 
     if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0') then
       s.add_runtime_dependency(%q<mongo>, [">= 0"])
+      s.add_runtime_dependency(%q<bson_ext>, [">= 0"])
       s.add_runtime_dependency(%q<uuidtools>, [">= 0"])
       s.add_runtime_dependency(%q<em-websocket>, [">= 0"])
       s.add_runtime_dependency(%q<sinatra>, [">= 0"])
       s.add_runtime_dependency(%q<haml>, [">= 0"])
       s.add_runtime_dependency(%q<launchy>, [">= 0"])
-      s.add_development_dependency(%q<thoughtbot-shoulda>, [">= 0"])
-      s.add_runtime_dependency(%q<mongo>, [">= 0"])
-      s.add_runtime_dependency(%q<em-websocket>, [">= 0"])
-      s.add_runtime_dependency(%q<uuidtools>, [">= 0"])
+      s.add_development_dependency(%q<rspec>, ["~> 2.8.0"])
+      s.add_development_dependency(%q<rdoc>, ["~> 3.12"])
+      s.add_development_dependency(%q<bundler>, [">= 0"])
+      s.add_development_dependency(%q<jeweler>, ["~> 1.8.3"])
+      s.add_development_dependency(%q<simplecov>, [">= 0"])
+      s.add_development_dependency(%q<pry>, [">= 0"])
     else
       s.add_dependency(%q<mongo>, [">= 0"])
+      s.add_dependency(%q<bson_ext>, [">= 0"])
       s.add_dependency(%q<uuidtools>, [">= 0"])
       s.add_dependency(%q<em-websocket>, [">= 0"])
       s.add_dependency(%q<sinatra>, [">= 0"])
       s.add_dependency(%q<haml>, [">= 0"])
       s.add_dependency(%q<launchy>, [">= 0"])
-      s.add_dependency(%q<thoughtbot-shoulda>, [">= 0"])
-      s.add_dependency(%q<mongo>, [">= 0"])
-      s.add_dependency(%q<em-websocket>, [">= 0"])
-      s.add_dependency(%q<uuidtools>, [">= 0"])
+      s.add_dependency(%q<rspec>, ["~> 2.8.0"])
+      s.add_dependency(%q<rdoc>, ["~> 3.12"])
+      s.add_dependency(%q<bundler>, [">= 0"])
+      s.add_dependency(%q<jeweler>, ["~> 1.8.3"])
+      s.add_dependency(%q<simplecov>, [">= 0"])
+      s.add_dependency(%q<pry>, [">= 0"])
     end
   else
     s.add_dependency(%q<mongo>, [">= 0"])
+    s.add_dependency(%q<bson_ext>, [">= 0"])
     s.add_dependency(%q<uuidtools>, [">= 0"])
     s.add_dependency(%q<em-websocket>, [">= 0"])
     s.add_dependency(%q<sinatra>, [">= 0"])
     s.add_dependency(%q<haml>, [">= 0"])
     s.add_dependency(%q<launchy>, [">= 0"])
-    s.add_dependency(%q<thoughtbot-shoulda>, [">= 0"])
-    s.add_dependency(%q<mongo>, [">= 0"])
-    s.add_dependency(%q<em-websocket>, [">= 0"])
-    s.add_dependency(%q<uuidtools>, [">= 0"])
+    s.add_dependency(%q<rspec>, ["~> 2.8.0"])
+    s.add_dependency(%q<rdoc>, ["~> 3.12"])
+    s.add_dependency(%q<bundler>, [">= 0"])
+    s.add_dependency(%q<jeweler>, ["~> 1.8.3"])
+    s.add_dependency(%q<simplecov>, [">= 0"])
+    s.add_dependency(%q<pry>, [">= 0"])
   end
 end
 

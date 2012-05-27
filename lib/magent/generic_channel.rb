@@ -33,6 +33,10 @@ module Magent
                                  :remove => true) rescue {}
     end
 
+    def clear!
+      collection.remove
+    end
+
     def collection
       @collection ||= Magent.database.collection(@name)
     end
@@ -53,38 +57,6 @@ module Magent
     protected
     def generate_uid
       UUIDTools::UUID.random_create.hexdigest
-    end
-
-    def async_find(klass, id)
-      klass = Object.module_eval(klass) if klass.kind_of?(String)
-
-      if id
-        klass.find(id)
-      else
-        klass
-      end
-    end
-
-    def encode_args(args)
-      args.map! do |arg|
-        if arg.class.respond_to?(:find) && arg.respond_to?(:id)
-          {'async_find' => [arg.class.to_s, arg.id]}
-        elsif arg.kind_of?(Class)
-          {'async_find' => [arg.to_s, nil]}
-        else
-          arg
-        end
-      end
-    end
-
-    def resolve_args(args)
-      args.map do |arg|
-        if arg.kind_of?(Hash) && arg.include?('async_find')
-          async_find(*arg['async_find'])
-        else
-          arg
-        end
-      end
     end
   end # GenericChannel
 end
