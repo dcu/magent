@@ -61,7 +61,7 @@ module Magent
     end
 
     def on_quit(updated_by)
-      stats_collection.update({:_id => @name}, {:set => {:"workers.#{updated_by}.quitted_at" => Time.now.utc} })
+      stats_collection.update({:_id => @name}, {:set => {:"workers.#{updated_by}.quit_at" => Time.now.utc} })
     end
   end
 end
