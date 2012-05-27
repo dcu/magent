@@ -104,7 +104,7 @@ module Magent
 
   private
   def self.config_for_environment(environment)
-    env = environment ? config[environment] : config
+    env = environment ? config[environment.to_s] : config
 
     return env if env['uri'].nil? || env['uri'].blank?
 
