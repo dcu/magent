@@ -35,10 +35,11 @@ module Magent
       end
 
       def commit!(method_name, args)
+        locale = defined?(I18n) ? I18n.locale.to_s : nil
         if Magent.sync_mode
           @target.send(method_name, *args)
         else
-          @channel.push(@target, [method_name, args], @priority)
+          @channel.push(@target, [method_name, args], @priority, locale)
         end
 
         @target
