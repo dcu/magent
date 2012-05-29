@@ -48,7 +48,6 @@ module Magent
         raise ArgumentError, "ruby blocks are not supported yet" if !blk.nil?
 
         commit!(m, args)
-        self
       end
     end
 
